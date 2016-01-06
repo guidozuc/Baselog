@@ -1,3 +1,7 @@
+package db;
+
+import model.Moment;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -238,17 +242,17 @@ public class DBStorage {
 		int counter=0;
 		while (rs.next())
 		{
-			moment.minute = rs.getString("id");
-			moment.date = rs.getString("date");
-			moment.location = rs.getString("location");
-			moment.activity = rs.getString("activity");
-			moment.imagepath=image_path;
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.minute+ "'";
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(image_path);
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				moment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 			counter++;
 		}
@@ -285,24 +289,24 @@ public class DBStorage {
 	 */
 	public Vector<Moment> getMomentsBefore(Moment referenceMoment, int range) throws SQLException {
 		Vector<Moment> before = new Vector<Moment>();
-		String query = "SELECT * FROM minute WHERE id < " + referenceMoment.minute
-				+ "AND id > " + String.valueOf(Integer.parseInt(referenceMoment.minute)  - range);
+		String query = "SELECT * FROM minute WHERE id < " + referenceMoment.getMinute()
+				+ "AND id > " + String.valueOf(Integer.parseInt(referenceMoment.getMinute())  - range);
 	    Statement st = this.connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next())
 		{
-			Moment aMoment = new Moment();
-			aMoment.minute = rs.getString("id");
-			aMoment.date = rs.getString("date");
-			aMoment.location = rs.getString("location");
-			aMoment.activity = rs.getString("activity");
-			aMoment.imagepath = rs.getString("image-path");
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + aMoment.minute+ "'";
+			Moment moment = new Moment();
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(rs.getString("image_path"));
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				aMoment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 		}
 		return before;
@@ -317,24 +321,24 @@ public class DBStorage {
 	 */
 	public Vector<Moment> getMomentsAfter(Moment referenceMoment, int range) throws SQLException {
 		Vector<Moment> before = new Vector<Moment>();
-		String query = "SELECT * FROM minute WHERE id > " + referenceMoment.minute
-				+ "AND id < " + String.valueOf(Integer.parseInt(referenceMoment.minute) + range);
+		String query = "SELECT * FROM minute WHERE id > " + referenceMoment.getMinute()
+				+ "AND id < " + String.valueOf(Integer.parseInt(referenceMoment.getMinute()) + range);
 	    Statement st = this.connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next())
 		{
-			Moment aMoment = new Moment();
-			aMoment.minute = rs.getString("id");
-			aMoment.date = rs.getString("date");
-			aMoment.location = rs.getString("location");
-			aMoment.activity = rs.getString("activity");
-			aMoment.imagepath = rs.getString("image-path");
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + aMoment.minute+ "'";
+			Moment moment = new Moment();
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(rs.getString("image_path"));
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				aMoment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 		}
 		return before;

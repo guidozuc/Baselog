@@ -1,9 +1,12 @@
+package util;
+
 import java.io.File;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import model.Query;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,10 +20,10 @@ import org.w3c.dom.NodeList;
  * @author zuccong
  *
  */
-public class QuerySet {
+public class QuerySetReader {
 
-	HashMap<String, Query> queryset = new HashMap<String, Query>();
-	
+	private HashMap<String, Query> querySet = new HashMap<String, Query>();
+
 	public void readQueryFile(String filepath) {
 		try {
 
@@ -60,28 +63,36 @@ public class QuerySet {
 					query.setNarrative(eElement.getElementsByTagName("narrative").item(0).getTextContent());
 					//System.out.println("mapping : " + eElement.getElementsByTagName("mapping").item(0).getTextContent());
 					query.setConcept_maping(eElement.getElementsByTagName("mapping").item(0).getTextContent());
-					
+
 					query.formWeightedQuery_unbiased(query.getConcept_maping());
-					this.queryset.put(query.getQid(), query);
+					this.querySet.put(query.getQid(), query);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	public HashMap<String, Query> getQuerySet() {
+		return querySet;
+	}
+
+	public void setQuerySet(HashMap<String, Query> querySet) {
+		this.querySet = querySet;
+	}
+
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		QuerySet queryset = new QuerySet();
+		QuerySetReader queryset = new QuerySetReader();
 		queryset.readQueryFile("/Users/zuccong/data/ntcir2015_lifelogging/lifeloggin_topics_dryrun.txt");
-		for (String qid : queryset.queryset.keySet()) {
-			Query query = queryset.queryset.get(qid);
+		for (String qid : queryset.querySet.keySet()) {
+			Query query = queryset.querySet.get(qid);
 			System.out.println("qid = " + qid);
-			for(String concept : query.weightedQuery.keySet()) {
-				System.out.println(concept + " -> " + query.weightedQuery.get(concept));
+			for(String concept : query.getWeightedQuery().keySet()) {
+				System.out.println(concept + " -> " + query.getWeightedQuery().get(concept));
 			}
 		}
 	}

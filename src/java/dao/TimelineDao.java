@@ -1,5 +1,12 @@
+package dao;
+
+import db.DBStorage;
+import model.Image;
+import model.Moment;
+
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.Vector;
 
 /**
  * 
@@ -9,7 +16,7 @@ import java.util.Properties;
  * @author zuccong
  *
  */
-public class Timeline {
+public class TimelineDao {
 
 	DBStorage db = new DBStorage();
 	
@@ -46,7 +53,7 @@ public class Timeline {
 	 * @return a moment 
 	 */
 	public Moment getMoment(Image image) throws SQLException {
-		Moment moment = db.queryMoment(image.imageURL);
+		Moment moment = db.queryMoment(image.getImageURL());
 		return moment;
 	}
 	
@@ -62,7 +69,7 @@ public class Timeline {
 	}
 	
 	public String getMinute(Image image) throws SQLException {
-		Moment moment = db.queryMoment(image.imageURL);
+		Moment moment = db.queryMoment(image.getImageURL());
 		String minute = moment.getMinute();
 		return minute;
 	}
@@ -74,7 +81,7 @@ public class Timeline {
 	}
 	
 	public String getLocation(Image image) throws SQLException {
-		Moment moment = db.queryMoment(image.imageURL);
+		Moment moment = db.queryMoment(image.getImageURL());
 		String location = moment.getLocation();
 		return location;
 	}
@@ -86,7 +93,7 @@ public class Timeline {
 	}
 	
 	public String getActivity(Image image) throws SQLException {
-		Moment moment = db.queryMoment(image.imageURL);
+		Moment moment = db.queryMoment(image.getImageURL());
 		String activity = moment.getActivity();
 		return activity;
 	}
@@ -98,7 +105,7 @@ public class Timeline {
 	}
 	
 	public String getDate(Image image) throws SQLException {
-		Moment moment = db.queryMoment(image.imageURL);
+		Moment moment = db.queryMoment(image.getImageURL());
 		String date = moment.getDate();
 		return date;
 	}
@@ -108,8 +115,14 @@ public class Timeline {
 		String date = moment.getDate();
 		return date;
 	}
-	
-	
+
+	public Vector<Moment> getMomentsBefore(Moment moment, int range) throws SQLException {
+		return db.getMomentsBefore(moment, range);
+	}
+	public Vector<Moment> getMomentsAfter(Moment moment, int range) throws SQLException {
+		return db.getMomentsAfter(moment, range);
+	}
+
 	/**
 	 * @param args
 	 * @throws SQLException 
@@ -117,16 +130,16 @@ public class Timeline {
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		
-		Timeline timeline = new Timeline();
-		timeline.init();
-		timeline.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
-		timeline.showTimeline();
+		TimelineDao timelineDao = new TimelineDao();
+		timelineDao.init();
+		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+		timelineDao.showTimeline();
 		System.out.println("query for the moment associated with image /u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg");
 		String queryImage = "/u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg";
-		Moment aMoment = timeline.getMoment(queryImage);
+		Moment aMoment = timelineDao.getMoment(queryImage);
 		System.out.println(aMoment.toString());
-		//timeline.getMomentsWithImages();
-		timeline.closeTimeline();
+		//timelineDao.getMomentsWithImages();
+		timelineDao.closeTimeline();
 	}
 
 }

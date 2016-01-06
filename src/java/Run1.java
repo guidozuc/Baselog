@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ListMultimap;
+import dao.TimelineDao;
+import model.Image;
+import model.Query;
+import util.*;
 
 /**
  * 
@@ -17,8 +21,8 @@ import com.google.common.collect.ListMultimap;
  * @author zuccong
  *
  * This class implements Run 1 of our Dry Run NTCIR 2015 Lifelog submission.
- * In RUn 1 we do a simple concept-based matching, by just returning images matched against query concepts.
- * Query concepts are extracted manually.
+ * In Run 1 we do a simple concept-based matching, by just returning images matched against query concepts.
+ * model.Query concepts are extracted manually.
  *
  *
  */
@@ -30,21 +34,21 @@ public class Run1 {
 		return imageid;
 	}
 	
-	public static List<String> runQuery(Query query, InvertedImageIndex index, ImageCollection iCollection, Timeline timeline) throws SQLException {
-		HashMap<String, Double> weightedQuery = query.weightedQuery;
+	public static List<String> runQuery(Query query, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao) throws SQLException {
+		HashMap<String, Double> weightedQuery = query.getWeightedQuery();
 		System.out.println("Finding images with concepts " + weightedQuery.toString());
 		ListMultimap<Double, Image> conceptResultsArray = index.findImagebyConcept(weightedQuery, iCollection);
 		List<String> resultdump = new ArrayList<String>(); //this is a very dirty way of dealing with the reversion of the conceptResultsArray
 		for (Double score : conceptResultsArray.keySet()) {
 			List<Image> images = conceptResultsArray.get(score);
-			//Iterator<Image> iterator = images.iterator();
+			//Iterator<model.Image> iterator = images.iterator();
 			ReverseIterator<Image> riterator = new ReverseIterator<Image>(images);
 			while(riterator.hasNext()) {
 				Image theNextImage = riterator.next();
-				//String line = timeline.getDate(theNextImage) + " " + timeline.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score;
-				String line = query.qid + ", " + formatImageID(theNextImage.getImageURL() + ", 1, " + score);
+				//String line = timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score;
+				String line = query.getQid() + ", " + formatImageID(theNextImage.getImageURL() + ", 1, " + score);
 				
-				//System.out.println(timeline.getDate(theNextImage) + " " + timeline.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score);
+				//System.out.println(timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score);
 				resultdump.add(line);
 			}	
 		}
@@ -78,21 +82,21 @@ public class Run1 {
 		
 	}
 	
-	public static void scoreQueryset(QuerySet queryset, InvertedImageIndex index, ImageCollection iCollection, Timeline timeline, int maxRank) throws SQLException {
-		for (String qid : queryset.queryset.keySet()) {
-			Query query = queryset.queryset.get(qid);
+	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, int maxRank) throws SQLException {
+		for (String qid : queryset.getQuerySet().keySet()) {
+			Query query = queryset.getQuerySet().get(qid);
 			System.out.println("qid = " + qid);
-			List<String> resultdump = runQuery(query, index, iCollection, timeline);
+			List<String> resultdump = runQuery(query, index, iCollection, timelineDao);
 			printRanking(resultdump, maxRank);
 			System.out.println("-----------------------------------------------------------------------------");
 		}
 	}
 	
-	public static void scoreQueryset(QuerySet queryset, InvertedImageIndex index, ImageCollection iCollection, Timeline timeline, PrintWriter writer, int maxRank) throws SQLException {
-		for (String qid : queryset.queryset.keySet()) {
-			Query query = queryset.queryset.get(qid);
+	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, PrintWriter writer, int maxRank) throws SQLException {
+		for (String qid : queryset.getQuerySet().keySet()) {
+			Query query = queryset.getQuerySet().get(qid);
 			System.out.println("qid = " + qid);
-			List<String> resultdump = runQuery(query, index, iCollection, timeline);
+			List<String> resultdump = runQuery(query, index, iCollection, timelineDao);
 			printRanking(resultdump, writer, maxRank);
 			System.out.println("-----------------------------------------------------------------------------");
 		}
@@ -116,17 +120,17 @@ public class Run1 {
 		InvertedImageIndex index = new InvertedImageIndex(iCollection);
 		System.out.println("... indexing finished");
 
-		System.out.println("Setting up a timeline");
-		Timeline timeline = new Timeline();
-		timeline.init();
-		timeline.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
-		System.out.println("... timeline finished");
+		System.out.println("Setting up a timelineDao");
+		TimelineDao timelineDao = new TimelineDao();
+		timelineDao.init();
+		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+		System.out.println("... timelineDao finished");
 
 		PrintWriter writer = new PrintWriter("/Users/zuccong/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
 		
-		QuerySet queryset = new QuerySet();
+		QuerySetReader queryset = new QuerySetReader();
 		queryset.readQueryFile("/Users/zuccong/data/ntcir2015_lifelogging/lifeloggin_topics_dryrun.txt");
-		scoreQueryset(queryset, index, iCollection, timeline, writer, 100);
+		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100);
 		writer.close();
 	}
 

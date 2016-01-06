@@ -1,3 +1,5 @@
+package model;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -35,22 +37,23 @@ import org.w3c.dom.NodeList;
  * */
 
 public class Query {
-	String qid="";
-	String uid="";
-	String type="";
-	String title="";
-	String description="";
-	String narrative="";
-	String concept_mapping_string="";
-	
-	HashMap<String, Double> weightedQuery = new HashMap<String, Double>();
-	
+
+	private String qid="";
+	private String uid="";
+	private String type="";
+	private String title="";
+	private String description="";
+	private String narrative="";
+	private String concept_mapping_string="";
+	private HashMap<String, Double> weightedQuery = new HashMap<String, Double>();
+
 	/**
 	 * @return the qid
 	 */
 	public String getQid() {
 		return qid;
 	}
+
 	/**
 	 * @param qid the qid to set
 	 */
@@ -105,15 +108,15 @@ public class Query {
 	public void setConcept_maping(String concept_maping) {
 		this.concept_mapping_string = concept_maping;
 	}
-
-	
-
 	/**
 	 * @return the uid
 	 */
 	public String getUid() {
 		return uid;
 	}
+
+
+
 	/**
 	 * @param uid the uid to set
 	 */
@@ -132,9 +135,9 @@ public class Query {
 	public void setType(String type) {
 		this.type = type;
 	}
-
 	/**
 	 * Populates a weighted query structure, but all weights are equal
+	 * TODO: This should be moved out of the model
 	 * @param concept_string a string containing a sequence of concepts
 	 */
 	public void formWeightedQuery_unbiased(String concept_string) {
@@ -145,11 +148,21 @@ public class Query {
 		}else
 			System.err.println("Empty concept translation for query " + this.qid + " - the query will probably not retrieve anything");
 	}
-	
-	public static void main(String[] args) {
-		QuerySet queryset = new QuerySet();
-		queryset.readQueryFile("/Users/zuccong/data/ntcir2015_lifelogging/lifeloggin_topics_dryrun.txt");
 
+	public HashMap<String, Double> getWeightedQuery() {
+		return weightedQuery;
+	}
+
+	public void setWeightedQuery(HashMap<String, Double> weightedQuery) {
+		this.weightedQuery = weightedQuery;
+	}
+
+	public String getConcept_mapping_string() {
+		return concept_mapping_string;
+	}
+
+	public void setConcept_mapping_string(String concept_mapping_string) {
+		this.concept_mapping_string = concept_mapping_string;
 	}
 
 }

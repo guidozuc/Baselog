@@ -1,3 +1,5 @@
+package model;
+
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -12,16 +14,16 @@ import java.util.Vector;
 public class Image {
 
 	String imageURL;
-	HashMap<String,Concept> conceptVector;
+	HashMap<String, Concept> conceptVector;
 	
-	Image(String imageURL, HashMap<String,Concept> conceptVector){
+	public Image(String imageURL, HashMap<String, Concept> conceptVector){
 		this.imageURL = imageURL;
 		this.conceptVector = conceptVector;
 	}
-	
-	Image(String imageURL){
+
+	public Image(String imageURL){
 		this.imageURL=imageURL;
-		this.conceptVector = new HashMap<String,Concept>();
+		this.conceptVector = new HashMap<String, Concept>();
 	}
 
 	/**

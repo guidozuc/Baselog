@@ -1,4 +1,5 @@
-import java.io.IOException;
+package util;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,8 +13,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
+import model.Concept;
+import model.Image;
 
 /**
  * 
@@ -27,9 +28,9 @@ public class InvertedImageIndex {
 	ListMultimap<String, Image> mainConceptIndex = ArrayListMultimap.create();
 	ListMultimap<String, Image> mainKeywordIndex = ArrayListMultimap.create();
 	
-	InvertedImageIndex(){}
+	public InvertedImageIndex(){}
 	
-	InvertedImageIndex(ImageCollection iCollection){
+	public InvertedImageIndex(ImageCollection iCollection){
 		Iterator it = iCollection.collection.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
@@ -42,14 +43,14 @@ public class InvertedImageIndex {
 	        	Map.Entry pairCv = (Map.Entry)itCv.next();
 	        	String conceptid = (String) pairCv.getKey();
 	        	Concept thisConcept = (Concept) pairCv.getValue();
-	        	if(thisConcept.score>0.0)
+	        	if(thisConcept.getScore()>0.0)
 	        		this.putConceptImage(conceptid, im); // adds an image to the mainConceptIndex
 	        	//now need to iterate through the thisConcept.keywords to be able to index the keywords
-	        	Vector<String> someKeywords = thisConcept.keywords;
+	        	Vector<String> someKeywords = thisConcept.getKeywords();
 	        	Iterator itK = someKeywords.iterator();
 	            while (itK.hasNext()){
 	            	String akeyword = (String) itK.next();
-	            	if(thisConcept.score>0.0)
+	            	if(thisConcept.getScore()>0.0)
 	            		this.putKeywordImage(akeyword, im);
 	            }
 	        }
@@ -83,12 +84,12 @@ public class InvertedImageIndex {
 		Iterator<Image> iterator = results.iterator();
 		while (iterator.hasNext()) {
 			Image thisImage = iterator.next();
-			Concept thisConcept = thisImage.conceptVector.get(aConcept);
-			double score = thisConcept.score;
+			Concept thisConcept = thisImage.getConceptVector().get(aConcept);
+			double score = thisConcept.getScore();
 			//System.out.println(thisImage.imageURL + " " + thisImage.conceptVector.toString() );
-			if(accumulator.containsKey(thisImage.imageURL))
-				score = score + accumulator.get(thisImage.imageURL);
-			accumulator.put(thisImage.imageURL, score);
+			if(accumulator.containsKey(thisImage.getImageURL()))
+				score = score + accumulator.get(thisImage.getImageURL());
+			accumulator.put(thisImage.getImageURL(), score);
 		}
 		//the object ranking contains <score, image> pairs
 		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(

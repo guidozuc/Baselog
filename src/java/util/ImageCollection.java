@@ -1,19 +1,19 @@
+package util;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.SortedSetMultimap;
+import dao.TimelineDao;
+import model.Concept;
+import model.Image;
 
 /**
  * 
@@ -69,7 +69,7 @@ public class ImageCollection {
 				for(int i=1; i<fields.length;i++) {
 					String conceptid = conceptIds.get(i);
 					//if(Double.parseDouble(fields[i])>0.0) {
-						Concept thisConcept = new Concept(conceptid, this.conceptVocabulary.getConceptDescription(conceptid), 
+						Concept thisConcept = new Concept(conceptid, this.conceptVocabulary.getConceptDescription(conceptid),
 							this.conceptVocabulary.getConceptkeywords(conceptid), Double.parseDouble(fields[i]));
 						image.addConcept(thisConcept);
 					//}
@@ -140,7 +140,7 @@ public class ImageCollection {
 		Iterator it = iCollection.collection.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
-	        Image im =  (Image) pair.getValue();
+	        model.Image im =  (model.Image) pair.getValue();
 	        System.out.println(pair.getKey() + " -> " + im.getImageURL() + " - " + im.getConceptVector().toString());
 	    }
 	    */
@@ -149,17 +149,17 @@ public class ImageCollection {
 	    InvertedImageIndex index = new InvertedImageIndex(iCollection);
 	    System.out.println("... indexing finished");
 	    
-	    System.out.println("Setting up a timeline");
-	    Timeline timeline = new Timeline();
-		timeline.init();
-		timeline.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
-	    System.out.println("... timeline finished");
+	    System.out.println("Setting up a timelineDao");
+	    TimelineDao timelineDao = new TimelineDao();
+		timelineDao.init();
+		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+	    System.out.println("... timelineDao finished");
 	    
 	    
 	    Iterator<Image> iterator = null;
 	    /*String keyword = "coffee";
 	    System.out.println("Finding images with keyword " + keyword);
-	    List<Image> results = index.findImagebyKeyword(keyword);
+	    List<model.Image> results = index.findImagebyKeyword(keyword);
 	    iterator = results.iterator();
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next().getImageURL());
@@ -167,9 +167,9 @@ public class ImageCollection {
 		
 		/*String concept = "c_505";
 		System.out.println("Finding images with concept " + concept);
-		ListMultimap<Double, Image> conceptResults = index.findImagebyConcept(concept, iCollection);
+		ListMultimap<Double, model.Image> conceptResults = index.findImagebyConcept(concept, iCollection);
 		for (Double score : conceptResults.keySet()) {
-			List<Image> images = conceptResults.get(score);
+			List<model.Image> images = conceptResults.get(score);
 			iterator = images.iterator();
 			while(iterator.hasNext())
 				System.out.println(iterator.next().getImageURL() + " " + score);
@@ -178,9 +178,9 @@ public class ImageCollection {
 		/*String[] array = {"c_505", "c_506"};
 		Vector<String> query = new Vector(Arrays.asList(array)); 
 		System.out.println("Finding images with concepts " + query.toString());
-		ListMultimap<Double, Image> conceptResultsArray = index.findImagebyConcept(query, iCollection);
+		ListMultimap<Double, model.Image> conceptResultsArray = index.findImagebyConcept(query, iCollection);
 		for (Double score : conceptResultsArray.keySet()) {
-			List<Image> images = conceptResultsArray.get(score);
+			List<model.Image> images = conceptResultsArray.get(score);
 			iterator = images.iterator();
 			while(iterator.hasNext())
 				System.out.println(iterator.next().getImageURL() + " " + score);
@@ -198,8 +198,8 @@ public class ImageCollection {
 			ReverseIterator<Image> riterator = new ReverseIterator<Image>(images);
 			while(riterator.hasNext()) {
 				Image theNextImage = riterator.next();
-				String line = timeline.getDate(theNextImage) + " " + timeline.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score;
-				//System.out.println(timeline.getDate(theNextImage) + " " + timeline.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score);
+				String line = timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score;
+				//System.out.println(timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score);
 				resultdump.add(line);
 			}	
 		}
