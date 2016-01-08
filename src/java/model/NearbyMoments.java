@@ -1,3 +1,8 @@
+package model;
+
+import dao.TimelineDao;
+import model.Moment;
+
 import java.sql.SQLException;
 import java.util.Vector;
 
@@ -68,9 +73,15 @@ public class NearbyMoments {
 	}
 
 
-	public void getNearbyMoments(Moment referenceMoment, Timeline timeline) throws SQLException {
-		this.before = timeline.db.getMomentsBefore(referenceMoment, this.range);
-		this.after = timeline.db.getMomentsAfter(referenceMoment, this.range);
+	/**
+	 * TODO: Move this method outside of the model
+	 * @param referenceMoment
+	 * @param timelineDao
+	 * @throws SQLException
+     */
+	public void getNearbyMoments(Moment referenceMoment, TimelineDao timelineDao) throws SQLException {
+		this.before = timelineDao.getMomentsBefore(referenceMoment, this.range);
+		this.after = timelineDao.getMomentsAfter(referenceMoment, this.range);
 		//TODO: get the ones after
 	}
 	

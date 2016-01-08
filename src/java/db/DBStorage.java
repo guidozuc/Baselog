@@ -1,8 +1,8 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+package db;
+
+import model.Moment;
+
+import java.sql.*;
 import java.util.Vector;
 
 /**
@@ -16,12 +16,37 @@ import java.util.Vector;
 public class DBStorage {
 
 	
-	Connection connection=null;
-	String DBName="";
-	String username="";
-	String password="";
-	static final String DB_URL = "jdbc:mysql://localhost/";
-	
+	private Connection connection;
+	private String DBName;
+	private String username;
+	private String password;
+	private String DB_URL;
+
+	public DBStorage(String url, String dbName, String username, String password) throws SQLException {
+		this.username=username;
+		this.password=password;
+		this.DBName = dbName;
+		this.DB_URL = url;
+		this.DBName = dbName;
+
+		try {
+			Class.forName("org.gjt.mm.mysql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		Connection tmpConnection = DriverManager.getConnection(DB_URL,username,password);
+
+		Statement stmt = tmpConnection.createStatement();
+		stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + dbName);
+		stmt.close();
+		tmpConnection.close();
+
+		this.connection = DriverManager.getConnection(DB_URL + dbName,username,password);
+
+		System.out.println("Database created successfully...");
+	}
+
 	public String getDBName() {
 		return DBName;
 	}
@@ -47,54 +72,12 @@ public class DBStorage {
 	}
 
 	/**
-	 * Creates a database if it doesn't exist
-	 * 
-	 * @param DBName the name of the database to create
-	 * @param username the username to access the database application
-	 * @param password the password associated to the username
-	 */
-	public void connect(String DBName, String username, String password) throws SQLException, ClassNotFoundException {
-		this.DBName=DBName;
-		this.username=username;
-		this.password=password;
-		String myDriver = "org.gjt.mm.mysql.Driver";
-		String myUrl = "jdbc:mysql://localhost/";
-		Class.forName(myDriver);
-		this.connection =  DriverManager.getConnection(DB_URL,username,password);
-		Statement st = connection.createStatement();
-		st.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DBName + ";");
-		//st.close();
-		System.out.println("Database created successfully...");
-	}
-	
-	/**
-	 * Connects to the database
-	 * 
-	 */
-	public void connect() throws SQLException, ClassNotFoundException {
-		String myDriver = "org.gjt.mm.mysql.Driver";
-		String myUrl = "jdbc:mysql://localhost/";
-		Class.forName(myDriver);
-		this.connection =  DriverManager.getConnection("jdbc:mysql://localhost/" + this.DBName,  this.username, this.password);
-		Statement st = connection.createStatement();
-		System.out.println("Creating DB");
-		st.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DBName + ";");
-		
-		//st.close();
-		System.out.println("Database created successfully...");
-		System.out.println("connected...");
-	}
-	
-	
-	/**
 	 * Creates the tables required by the Lifelogging database
 	 * 
 	 * 
 	 */
 	public void createLifeloggingTables() throws SQLException, ClassNotFoundException {
-		if(this.connection.isClosed())
-			this.connect();
-	
+
 		String sqlCreateTblMinute = "CREATE TABLE IF NOT EXISTS minute ("
 	            + "   id INT NOT NULL,"
 	            + "   date VARCHAR(50) NOT NULL,"
@@ -126,14 +109,12 @@ public class DBStorage {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public void removeLifeloggingTables() throws SQLException, ClassNotFoundException {
-		if(this.connection.isClosed())
-			this.connect();
+	public void removeLifeloggingTables() throws SQLException {
 
 		String sqlCommand1 = "DROP TABLE IF EXISTS minute";
 		String sqlCommand2 = "DROP TABLE IF EXISTS image";
 		Statement stmt = this.connection.createStatement();
-		
+
 		stmt.execute(sqlCommand2);
 		stmt.execute(sqlCommand1);
 		stmt.close();
@@ -146,9 +127,6 @@ public class DBStorage {
 	 * @throws ClassNotFoundException
 	 */
 	public void clearLifeloggingTables() throws SQLException, ClassNotFoundException {
-		if(this.connection.isClosed())
-			this.connect();
-
 		String sqlCommand1 = "DELETE TABLE IF EXISTS minute";
 		String sqlCommand2 = "DELETE TABLE IF EXISTS image";
 		Statement stmt = this.connection.createStatement();
@@ -164,19 +142,16 @@ public class DBStorage {
 	 * @throws ClassNotFoundException
 	 * 
 	 */
-	public void LoadLifeloggingData(String XMLFilePath) throws SQLException, ClassNotFoundException {
-		if(this.connection.isClosed())
-			this.connect();
-	
+	public void LoadLifeloggingData(String XMLFilePath) throws SQLException {
 		String loaddata1 = "LOAD XML INFILE '" + XMLFilePath + "'"
 	            + "INTO TABLE minute ROWS IDENTIFIED BY '<minute>'";
 		String loaddata2 = "LOAD XML INFILE '" + XMLFilePath + "'"
 	            + "INTO TABLE image ROWS IDENTIFIED BY '<image-path>'";
 		
-		 Statement stmt = this.connection.createStatement();
-		    stmt.execute(loaddata1);
-		    stmt.execute(loaddata2);
-		    stmt.close();
+		Statement stmt = this.connection.createStatement();
+		stmt.execute(loaddata1);
+		stmt.execute(loaddata2);
+		stmt.close();
 	}
 	
 	/**
@@ -186,8 +161,6 @@ public class DBStorage {
 	 * @return true if the image exists
 	 */
 	public boolean imageExists(String imageString) throws ClassNotFoundException, SQLException {
-		if(this.connection.isClosed())
-			this.connect();
 		String query = "SELECT * FROM minute WHERE `image-path`='" + imageString+"'";
 		Statement st = this.connection.createStatement();
 		// execute the query, and get a java resultset
@@ -200,9 +173,6 @@ public class DBStorage {
 	
 	
 	public void listAllMoments() throws ClassNotFoundException, SQLException {
-		if(this.connection.isClosed())
-			this.connect();
-		
 		String query = "SELECT * FROM minute";
 	    Statement st = this.connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
@@ -238,17 +208,17 @@ public class DBStorage {
 		int counter=0;
 		while (rs.next())
 		{
-			moment.minute = rs.getString("id");
-			moment.date = rs.getString("date");
-			moment.location = rs.getString("location");
-			moment.activity = rs.getString("activity");
-			moment.imagepath=image_path;
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.minute+ "'";
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(image_path);
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				moment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 			counter++;
 		}
@@ -285,24 +255,24 @@ public class DBStorage {
 	 */
 	public Vector<Moment> getMomentsBefore(Moment referenceMoment, int range) throws SQLException {
 		Vector<Moment> before = new Vector<Moment>();
-		String query = "SELECT * FROM minute WHERE id < " + referenceMoment.minute
-				+ "AND id > " + String.valueOf(Integer.parseInt(referenceMoment.minute)  - range);
+		String query = "SELECT * FROM minute WHERE id < " + referenceMoment.getMinute()
+				+ "AND id > " + String.valueOf(Integer.parseInt(referenceMoment.getMinute())  - range);
 	    Statement st = this.connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next())
 		{
-			Moment aMoment = new Moment();
-			aMoment.minute = rs.getString("id");
-			aMoment.date = rs.getString("date");
-			aMoment.location = rs.getString("location");
-			aMoment.activity = rs.getString("activity");
-			aMoment.imagepath = rs.getString("image-path");
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + aMoment.minute+ "'";
+			Moment moment = new Moment();
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(rs.getString("image_path"));
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				aMoment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 		}
 		return before;
@@ -317,24 +287,24 @@ public class DBStorage {
 	 */
 	public Vector<Moment> getMomentsAfter(Moment referenceMoment, int range) throws SQLException {
 		Vector<Moment> before = new Vector<Moment>();
-		String query = "SELECT * FROM minute WHERE id > " + referenceMoment.minute
-				+ "AND id < " + String.valueOf(Integer.parseInt(referenceMoment.minute) + range);
+		String query = "SELECT * FROM minute WHERE id > " + referenceMoment.getMinute()
+				+ "AND id < " + String.valueOf(Integer.parseInt(referenceMoment.getMinute()) + range);
 	    Statement st = this.connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next())
 		{
-			Moment aMoment = new Moment();
-			aMoment.minute = rs.getString("id");
-			aMoment.date = rs.getString("date");
-			aMoment.location = rs.getString("location");
-			aMoment.activity = rs.getString("activity");
-			aMoment.imagepath = rs.getString("image-path");
-			String queryimages = "SELECT `image-path` FROM image WHERE id='" + aMoment.minute+ "'";
+			Moment moment = new Moment();
+			moment.setMinute(rs.getString("id"));
+			moment.setDate(rs.getString("date"));
+			moment.setLocation(rs.getString("location"));
+			moment.setActivity(rs.getString("activity"));
+			moment.setImagepath(rs.getString("image_path"));
+			String queryimages = "SELECT `image-path` FROM image WHERE id='" + moment.getMinute()+ "'";
 			Statement subst = this.connection.createStatement();
 			ResultSet subrs = subst.executeQuery(queryimages);
 			while (subrs.next())
 			{
-				aMoment.images.add(subrs.getString("image-path"));
+				moment.getImages().add(subrs.getString("image-path"));
 			}
 		}
 		return before;
@@ -351,14 +321,6 @@ public class DBStorage {
 		}catch(SQLException se){
 			se.printStackTrace();
 		}
-	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-
 	}
 
 }

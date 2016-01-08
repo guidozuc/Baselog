@@ -1,5 +1,8 @@
+package util;
+
+import model.Concept;
+
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,18 +13,18 @@ import java.util.Vector;
  */
 
 /**
- * @author zuccong
+ * @author harryscells
  *
  */
 public class ConceptVocabulary {
 
 	HashMap<String, Concept> vocabulary = new HashMap<String, Concept>(); //<conceptid, concept_object>
 	
-	ConceptVocabulary(){
+	public ConceptVocabulary(){
 		this.vocabulary = new HashMap<String, Concept>();
 	}
 	
-	ConceptVocabulary(HashMap<String, Concept> vocabulary){
+	public ConceptVocabulary(HashMap<String, Concept> vocabulary){
 		this.vocabulary = vocabulary;
 	}
 	
@@ -76,7 +79,7 @@ public class ConceptVocabulary {
 	 */
 	public String getConceptDescription(String conceptid, boolean print) {
 		if(!this.vocabulary.containsKey(conceptid)) 
-			throw new IllegalArgumentException("Concept id not found in the vocabulary for id " + conceptid);
+			throw new IllegalArgumentException("model.Concept id not found in the vocabulary for id " + conceptid);
 		else {
 			Concept aConcept = this.vocabulary.get(conceptid);
 			String description = aConcept.getDescription();
@@ -111,10 +114,10 @@ public class ConceptVocabulary {
 	 */
 	public Vector<String> getConceptkeywords(String conceptid, boolean print) {
 		if(!this.vocabulary.containsKey(conceptid)) 
-			throw new IllegalArgumentException("Concept id not found in the vocabulary for id " + conceptid);
+			throw new IllegalArgumentException("model.Concept id not found in the vocabulary for id " + conceptid);
 		else {
 			Concept aConcept = this.vocabulary.get(conceptid);
-			Vector<String> conceptKeywords = aConcept.keywords;
+			Vector<String> conceptKeywords = aConcept.getKeywords();
 			if(print)
 				System.out.println("Keywords for concept " + conceptid + ": " + conceptKeywords.toString());
 			return conceptKeywords;
@@ -144,7 +147,7 @@ public class ConceptVocabulary {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String filepath = "/Users/zuccong/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
+		String filepath = "/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
 		ConceptVocabulary cv = new ConceptVocabulary();
 		cv.readVocabulary(filepath);
 		cv.getConceptDescription("c_10", true);

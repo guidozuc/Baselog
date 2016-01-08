@@ -2,3 +2,8 @@ bin/
 .classpath
 .project
 .settings/
+.gradle/
+build
+Baselog.iml
+.idea
+workspace.xml

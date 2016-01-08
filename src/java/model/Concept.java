@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Vector;
 
 /**
@@ -10,24 +12,24 @@ import java.util.Vector;
  */
 public class Concept {
 
-	String conceptid;
-	String description;
-	Vector<String> keywords;
+	private String conceptid;
+	private String description;
+	private Vector<String> keywords;
 	double score;
 	
-	Concept(){
+	public Concept(){
 		conceptid="";
 		description="";
 		keywords=new Vector<String>();
 	}
-	
-	Concept(String conceptid, String description, Vector<String> keywords){
+
+	public Concept(String conceptid, String description, Vector<String> keywords){
 		this.conceptid = conceptid;
 		this.description = description;
 		this.keywords=keywords;
 	}
-	
-	Concept(String conceptid, String description, Vector<String> keywords, double score){
+
+	public Concept(String conceptid, String description, Vector<String> keywords, double score){
 		this.conceptid = conceptid;
 		this.description = description;
 		this.keywords=keywords;
@@ -38,7 +40,7 @@ public class Concept {
 	 * this parses keyword phrases like "great white shark,white shark,man-eater,man-eating shark,Carcharodon carcharias"
 	 * 
 	 * */
-	Concept(String conceptid, String description, String keywordsPhrases){
+	public Concept(String conceptid, String description, String keywordsPhrases){
 		this.conceptid = conceptid;
 		this.description = description;
 		this.keywords=new Vector<String>();

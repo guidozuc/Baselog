@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Vector;
 
 /**
@@ -14,12 +16,12 @@ import java.util.Vector;
  */
 public class Moment {
 
-	String date="";
-	String minute="";
-	String activity="";
-	String location="";
-	String imagepath="";
-	Vector<String> images = new Vector<String>();
+	private String date="";
+	private String minute="";
+	private String activity="";
+	private String location="";
+	private String imagepath="";
+	private Vector<String> images = new Vector<String>();
 	
 	/**
 	 * @return the date
@@ -98,7 +100,7 @@ public class Moment {
 	 */
 	@Override
 	public String toString() {
-		return "Moment [date=" + date + ", minute=" + minute + ", activity="
+		return "model.Moment [date=" + date + ", minute=" + minute + ", activity="
 				+ activity + ", location=" + location + ", imagepath="
 				+ imagepath + ", images=" + images + "]";
 	}

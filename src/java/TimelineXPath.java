@@ -48,7 +48,7 @@ public class TimelineXPath {
 		factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 		SAXParser saxParser = factory.newSAXParser();
 
-		LifeloggingHandler handler = new LifeloggingHandler();
+		util.LifeloggingHandler handler = new util.LifeloggingHandler();
 
 		saxParser.parse("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml", handler);
 	*/
