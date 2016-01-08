@@ -287,9 +287,14 @@
 		<title>Shopping for a Bottle of Wine</title>
 		<description>Find the moment(s) when I was shopping for wine in a supermarket.</description>
 		<narrative>The shopping must take place in a supermarket and the wine must be clearly visible in the user's hands. Moments containing views of wine on a shelf are not relevant unless the wine is picked up and examined. The moment begins when the user stands in the front of the wine shelf and ends when the user leaves this area of the supermarket. Shopping for alcohol other than wine is not considered relevant. It does not matter if the wine is consumed or not.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>shopping bottle wine</keywords>
+		<constraints>in a supermarket wine in hand</constraints>
+		<mapping>
+			<concept id="c_908" weight="1.0" />
+			<concept id="c_967" weight="0.7" />
+			<concept id="c_792" weight="0.1" />
+			<concept id="c_791" weight="0.1" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>022</id>
@@ -298,9 +303,11 @@
 		<title>ATM</title>
 		<description>Find the moment(s) when I was using an ATM machine.</description>
 		<narrative>The ATM Machine can be from any bank and in any location. To be relevant, the user must be directly in front of the machine with no people between the user and machine. Moments that show an ATM machine without showing the user directly in front of the machine are not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>using atm</keywords>
+		<constraints>directly in front of machine</constraints>
+		<mapping>
+			<concept id="c_481" weight="1.0" />
+ 		</mapping>
 	</topic>
 	<topic>
 		<id>023</id>
@@ -309,9 +316,15 @@
 		<title>Shopping For Fish</title>
 		<description>Find the moment(s) when I was shopping for fish in the supermarket.</description>
 		<narrative>To be considered relevant the moment must show the user inside the supermarket on a shopping activity. The user must be clearly shopping and interacting with objects, including fish, in the supermarket. If the user is in a supermarket and does not buy fish, the shopping event is not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>shopping fish</keywords>
+		<constraints>inside supermarket</constraints>
+		<mapping>
+			<concept id="c_124" weight="0.2" />
+			<concept id="c_125" weight="0.2" />
+			<concept id="c_396" weight="0.5" />
+			<concept id="c_791" weight="0.1" />
+			<concept id="c_792" weight="0.1" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>024</id>
@@ -320,9 +333,11 @@
 		<title>Repairing a Car Wheel</title>
 		<description>Find the moment(s) when I was repairing my car by replacing the wheel.</description>
 		<narrative>The relevant moments must show the user replacing a damaged car tyre. To be considered relevant, the original alloy wheel clearly seen to be replaced with a black steel wheel. Any point from the start to the end of this repair event is considered relevant. Observing a wheel replacement/repair on the television is not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>replacing car wheel</keywords>
+		<constraints>wheel must come off and be put back on and cannot be on television</constraints>
+		<mapping>
+			<concept id="c_480" weight="1.0" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>025</id>
@@ -331,9 +346,11 @@
 		<title>Cycling home</title>
 		<description>Find the moment(s) when I was cycling home from work.</description>
 		<narrative>The relevant moments must show the user cycling a bicycle from his/her point of view. Cycling home from work is relevant. Cycling to work or cycling to/from other destinations are not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>riding bike home</keywords>
+		<constraints>riding bike from point of view to the home destination</constraints>
+		<mapping>
+			<concept id="c_672" weight="0.7" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>026</id>
@@ -342,9 +359,14 @@
 		<title>Happy Homework</title>
 		<description>Find the moment(s) in which I was drinking a drink at home while in front of my laptop and also eating cake.</description>
 		<narrative>To be considered relevant, the moments must show the user in front of the laptop with coffee/tea and cake visible. Only moments occurring at home are considered relevant. Related moments in any other location are not considered relevant. </narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>home working drinking eating cake</keywords>
+		<constraints>all actions must be happening at the same time</constraints>
+		<mapping>
+			<concept id="c_621" weight="1.0" />
+			<concept id="c_505" weight="0.8" />
+			<concept id="c_968" weight="0.6" />
+			<concept id="c_510" weight="0.8" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>027</id>
@@ -353,9 +375,13 @@
 		<title>Shopping</title>
 		<description>Find the moment(s) in which I was grocery shopping in the supermarket.</description>
 		<narrative>To be relevant, the user must clearly be inside a supermarket and shopping. Passing by or otherwise seeing a supermarket are not considered relevant if the user does not enter the supermarket to go shopping.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>grocery shopping</keywords>
+		<constraints>inside a supermarket</constraints>
+		<mapping>
+			<concept id="c_791" weight="1.0" />
+			<concept id="c_792" weight="1.0" />
+			<concept id="c_583" weight="1.0" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>028</id>
@@ -364,9 +390,12 @@
 		<title>Informal Coffee Meeting</title>
 		<description>Find the moment(s) when I was talking to a colleague in my office with a cup of coffee in my hand.</description>
 		<narrative>To be considered relevant, the moment must take place in an office, the user must be talking to one colleague (though others may be in the background) and the user must have a cup of beverage in hand. Moments which take place outside of the office are not considered relevant. Moments of working on a computer or talking without coffee are not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>coffee meeting</keywords>
+		<constraints>inside office drinking coffee</constraints>
+		<mapping>
+			<concept id="c_505" weight="0.9" />
+			<concept id="c_968" weight="0.7" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>029</id>
@@ -375,8 +404,8 @@
 		<title>Lunchtime</title>
 		<description>Find the moment(s) in which I was eating lunch at the work restaurant with one colleague.</description>
 		<narrative>To be considered relevant, the moment must take place in a restaurant at a place of work. The meal must be a visibly being consumed and there must be one other individual with whom I am interacting. Any moments not containing all of these elements are not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>eating lunch with someone</keywords>
+		<constraints>only one person visible directly in front and meal is visible</constraints>
 		<mapping></mapping>
 	</topic>
 	<topic>
