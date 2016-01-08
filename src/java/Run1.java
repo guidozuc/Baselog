@@ -113,7 +113,7 @@ public class Run1 {
 		cv.readVocabulary(filepath_concept_list);
 		ImageCollection iCollection = new ImageCollection();
 		iCollection.setConceptVocabulary(cv);
-		String filepath="/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_Concepts.txt";
+		String filepath="/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_Concepts.txt";
 		iCollection.readCollection(filepath);
 
 		System.out.println("Start indexing");
@@ -122,7 +122,7 @@ public class Run1 {
 
 		System.out.println("Setting up a timelineDao");
 		TimelineDao timelineDao = new TimelineDao("jdbc:mysql://localhost:3306/", "NTCIRLifelogging", "root", null);
-		timelineDao.loadTimeline("/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+		timelineDao.loadTimeline("/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_dataset.xml");
 		System.out.println("... timelineDao finished");
 
 		PrintWriter writer = new PrintWriter("/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
