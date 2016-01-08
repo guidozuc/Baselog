@@ -1,15 +1,7 @@
 package model;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * 
@@ -45,8 +37,8 @@ public class Query {
 	private String description="";
 	private String narrative="";
 	private String concept_mapping_string="";
-	private HashMap<String, Double> weightedQuery = new HashMap<String, Double>();
 
+	private HashMap<String, Double> weightedQuery = new HashMap<String, Double>();
 	/**
 	 * @return the qid
 	 */
@@ -60,6 +52,7 @@ public class Query {
 	public void setQid(String qid) {
 		this.qid = qid;
 	}
+
 	/**
 	 * @return the title
 	 */
@@ -114,15 +107,13 @@ public class Query {
 	public String getUid() {
 		return uid;
 	}
-
-
-
 	/**
 	 * @param uid the uid to set
 	 */
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+
 	/**
 	 * @return the type
 	 */
@@ -135,19 +126,6 @@ public class Query {
 	public void setType(String type) {
 		this.type = type;
 	}
-	/**
-	 * Populates a weighted query structure, but all weights are equal
-	 * TODO: This should be moved out of the model
-	 * @param concept_string a string containing a sequence of concepts
-	 */
-	public void formWeightedQuery_unbiased(String concept_string) {
-		if(concept_string.length()>0) {
-			String[] concepts = concept_string.split(" ");
-			for(int i=0; i<concepts.length;i++)
-				this.weightedQuery.put(concepts[i], 1.0);
-		}else
-			System.err.println("Empty concept translation for query " + this.qid + " - the query will probably not retrieve anything");
-	}
 
 	public HashMap<String, Double> getWeightedQuery() {
 		return weightedQuery;
@@ -155,6 +133,10 @@ public class Query {
 
 	public void setWeightedQuery(HashMap<String, Double> weightedQuery) {
 		this.weightedQuery = weightedQuery;
+	}
+
+	public void addWeightedQuery(String id, Double weight) {
+		weightedQuery.put(id, weight);
 	}
 
 	public String getConcept_mapping_string() {

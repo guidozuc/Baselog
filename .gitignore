@@ -3,5 +3,7 @@ bin/
 .project
 .settings/
 .gradle/
+build
+Baselog.iml
 .idea
 workspace.xml

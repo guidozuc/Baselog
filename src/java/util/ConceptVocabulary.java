@@ -13,7 +13,7 @@ import java.util.Vector;
  */
 
 /**
- * @author zuccong
+ * @author harryscells
  *
  */
 public class ConceptVocabulary {
@@ -147,7 +147,7 @@ public class ConceptVocabulary {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String filepath = "/Users/zuccong/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
+		String filepath = "/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
 		ConceptVocabulary cv = new ConceptVocabulary();
 		cv.readVocabulary(filepath);
 		cv.getConceptDescription("c_10", true);

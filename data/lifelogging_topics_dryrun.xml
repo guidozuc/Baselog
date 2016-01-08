@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topics>
+    <topic>
+        <id>001</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Reading Papers</title>
+        <description>Find the moment(s) when I am reading a printed paper document.</description>
+        <narrative>Moments which show the user reading printed paper documents are relevant. Moments in which papers appear on a desk, but not being read, are not relevant. Moments in which the user is carrying papers are not relevant. Moments in which the user is reading shopping receipts are not relevant.</narrative>
+        <mapping></mapping>
+    </topic>
+    <topic>
+        <id>002</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Arrival at the Office</title>
+        <description>Find the moment(s) where I am about to enter my office after parking my car.</description>
+        <narrative>The moment when the user arrives at the office is relevant.  Arrival refers to the first view of the office desk. Arrival and working at any location besides the office is not relevant; nor is the second, or subsequent, moment of arrival at the office.</narrative>
+        <mapping></mapping>
+    </topic>
+    <topic>
+        <id>003</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Gone Shopping</title>
+        <description>Find the moment(s) when the user is grocery shopping.</description>
+        <narrative>Moments that show a period of grocery shopping is relevant. Going to a cafe and ordering food is not relevant.</narrative>
+        <mapping>
+            <concept id="c_791" weight="1.0" />
+            <concept id="c_792" weight="0.5" />
+            <concept id="c_583" weight="0.3" />
+        </mapping>
+    </topic>
+    <topic>
+        <id>004</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Breakfast</title>
+        <description>Find the moment(s) where I am preparing breakfast.</description>
+        <narrative>Moments that indicate some element of preparation before sitting down to eat a meal in the morning time are relevant. Meal preparation for meals other than the first meal of the day, or ordering food in a restaurant, are not relevant.</narrative>
+        <mapping>
+            <concept id="c_505" weight="1.0" />
+            <concept id="c_506" weight="1.0" />
+        </mapping>
+    </topic>
+    <topic>
+        <id>005</id>
+        <type>recall</type>
+        <uid>u1</uid>
+        <title>Social and Work Interactions</title>
+        <description>Find the moment(s) where I interact with at least two people at the same time.</description>
+        <narrative>All moments of interaction are relevant once there are two or more people interacting with the user. Moments showing only bystanders who are not interacting with the user would not be considered relevant.</narrative>
+        <mapping></mapping>
+    </topic>
+    <topic>
+        <id>006</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Gone out for a Meeting</title>
+        <description>Find the moment(s) where I am in a meeting in a building that is not my normal office building.</description>
+        <narrative>The user must have left his/her own building and gone outside to enter a another building in order to be relevant. Meetings in offices in the same building are not relevant.</narrative>
+        <mapping></mapping>
+    </topic>
+    <topic>
+        <id>007</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Buying on Credit</title>
+        <description>Find the moment(s) where I am paying for something using a credit/debit card.</description>
+        <narrative>In order to be relevant, the credit/debit card must be visible at the same time as making a purchase. Cash, or purchases that are not clearly utilising a credit/debit card are not relevant.</narrative>
+        <mapping></mapping>
+    </topic>
+    <topic>
+        <id>008</id>
+        <type>recall</type>
+        <uid>u1</uid>
+        <title>Driving</title>
+        <description>Find the moment(s) where I am driving my car.</description>
+        <narrative>All vehicle driving moments are relevant. Moments in which the user is a passenger in the vehicle of another are not relevant.</narrative>
+        <mapping>
+            <concept id="c_818" weight="1.0" />
+        </mapping>
+    </topic>
+    <topic>
+        <id>009</id>
+        <type>recall</type>
+        <uid>u1</uid>
+        <title>Working with my Screen</title>
+        <description>Find the moment(s) where I am working on the computer.</description>
+        <narrative>All moments that show a computer (desktop or laptop) are relevant. Moments showing the user interacting with a mobile phone are not relevant.</narrative>
+        <mapping>
+            <concept id="c_783" weight="1.0" />
+            <concept id="c_665" weight="1.0" />
+            <concept id="c_674" weight="1.0" />
+            <concept id="c_682" weight="1.0" />
+            <concept id="c_509" weight="1.0" />
+            <concept id="c_528" weight="1.0" />
+            <concept id="c_621" weight="1.0" />
+        </mapping>
+    </topic>
+    <topic>
+        <id>010</id>
+        <type>precision</type>
+        <uid>u1</uid>
+        <title>Climbing Steps</title>
+        <description>Find the moment(s) where I am walking up outside steps.</description>
+        <narrative>The steps must be visible for the moment to be relevant. Moments which show stairs descending are not relevant. Moments which show internal stair climbing are not relevant either.</narrative>
+        <mapping></mapping>
+    </topic>
+</topics>

@@ -43,8 +43,6 @@ public class QuerySetReader {
 
 				Node nNode = nList.item(temp);
 
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 					Element eElement = (Element) nNode;
@@ -62,9 +60,18 @@ public class QuerySetReader {
 					//System.out.println("narrative : " + eElement.getElementsByTagName("narrative").item(0).getTextContent());
 					query.setNarrative(eElement.getElementsByTagName("narrative").item(0).getTextContent());
 					//System.out.println("mapping : " + eElement.getElementsByTagName("mapping").item(0).getTextContent());
-					query.setConcept_maping(eElement.getElementsByTagName("mapping").item(0).getTextContent());
+//					query.setConcept_maping(eElement.getElementsByTagName("mapping").item(0).getTextContent());
 
-					query.formWeightedQuery_unbiased(query.getConcept_maping());
+					NodeList mapping = eElement.getElementsByTagName("mapping").item(0).getChildNodes();
+					for (int i = 0; i < mapping.getLength(); i++) {
+						Node map = mapping.item(i);
+						if (map.getNodeType() == Node.ELEMENT_NODE) {
+							String name = map.getAttributes().getNamedItem("id").getNodeValue();
+							Double weight = Double.parseDouble(map.getAttributes().getNamedItem("weight").getNodeValue());
+							query.addWeightedQuery(name, weight);
+						}
+					}
+
 					this.querySet.put(query.getQid(), query);
 				}
 			}
