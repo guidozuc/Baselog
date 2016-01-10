@@ -129,7 +129,7 @@ public class Run1 {
 		PrintWriter writer = new PrintWriter("/data/ntcir2015_lifelogging/runs/run1.txt", "UTF-8");//"/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
 		
 		QuerySetReader queryset = new QuerySetReader();
-		queryset.readQueryFile("data/lifelogging_topics_dryrun.xml");
+		queryset.readQueryFile("data/lifelogging_topics_formal.xml");//("data/lifelogging_topics_dryrun.xml");
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100);
 		writer.close();
 	}
