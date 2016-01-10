@@ -108,12 +108,13 @@ public class Run1 {
 	 * @throws ClassNotFoundException 
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
-		String filepath_concept_list = "/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
+		//TODO: read paths from a configuration file; need to set gradlew to accept and parse inputs
+		String filepath_concept_list = "/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";//"/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
 		ConceptVocabulary cv = new ConceptVocabulary();
 		cv.readVocabulary(filepath_concept_list);
 		ImageCollection iCollection = new ImageCollection();
 		iCollection.setConceptVocabulary(cv);
-		String filepath="/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_Concepts.txt";
+		String filepath="/data/ntcir2015_lifelogging/NTCIR_Lifelog_formal_run_Dataset/NTCIR-Lifelog_formal_run_Concepts.txt";//"/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_Concepts.txt";
 		iCollection.readCollection(filepath);
 
 		System.out.println("Start indexing");
@@ -122,10 +123,10 @@ public class Run1 {
 
 		System.out.println("Setting up a timelineDao");
 		TimelineDao timelineDao = new TimelineDao("jdbc:mysql://localhost:3306/", "NTCIRLifelogging", "root", null);
-		timelineDao.loadTimeline("/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+		timelineDao.loadTimeline("/data/ntcir2015_lifelogging/NTCIR_Lifelog_formal_run_Dataset/NTCIR-Lifelog_formal_run_dataset.xml");//"/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
 		System.out.println("... timelineDao finished");
 
-		PrintWriter writer = new PrintWriter("/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
+		PrintWriter writer = new PrintWriter("/data/ntcir2015_lifelogging/runs/run1.txt", "UTF-8");//"/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
 		
 		QuerySetReader queryset = new QuerySetReader();
 		queryset.readQueryFile("data/lifelogging_topics_dryrun.xml");
