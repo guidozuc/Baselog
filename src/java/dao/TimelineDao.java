@@ -4,6 +4,8 @@ import db.DBStorage;
 import model.Image;
 import model.Moment;
 
+import java.io.File;
+import java.nio.file.FileSystemException;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Vector;
@@ -18,20 +20,21 @@ import java.util.Vector;
  */
 public class TimelineDao {
 
-	DBStorage db = new DBStorage();
-	
-	public void init() throws ClassNotFoundException, SQLException {
-		Properties prop = new Properties();
-		db.setDBName("NTCIRLifelogging");
-		db.setUsername("root"); //change the username as required
-		db.setPassword("birdFlu"); //change the password as required
-		db.connect();
+	private DBStorage db;
+
+	public TimelineDao(String url, String dbName, String username, String password) throws SQLException, ClassNotFoundException {
+		this.db = new DBStorage(url, dbName, username, password);
 		db.removeLifeloggingTables();
 		db.createLifeloggingTables();
 	}
 	
-	public void loadTimeline(String XMLFilePath) throws ClassNotFoundException, SQLException {
-		db.LoadLifeloggingData(XMLFilePath);
+	public void loadTimeline(String XMLFilePath) throws SQLException, FileSystemException {
+		File xmlFile = new File(XMLFilePath);
+		if (xmlFile.exists()) {
+			db.LoadLifeloggingData(XMLFilePath);
+		} else {
+			throw new FileSystemException("XML file does no exist.");
+		}
 	}
 	
 	public void showTimeline() throws ClassNotFoundException, SQLException {
@@ -129,17 +132,17 @@ public class TimelineDao {
 	 * @throws ClassNotFoundException 
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		
-		TimelineDao timelineDao = new TimelineDao();
-		timelineDao.init();
-		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
-		timelineDao.showTimeline();
-		System.out.println("query for the moment associated with image /u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg");
-		String queryImage = "/u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg";
-		Moment aMoment = timelineDao.getMoment(queryImage);
-		System.out.println(aMoment.toString());
-		//timelineDao.getMomentsWithImages();
-		timelineDao.closeTimeline();
+//
+//		TimelineDao timelineDao = new TimelineDao();
+//		timelineDao.init();
+//		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+//		timelineDao.showTimeline();
+//		System.out.println("query for the moment associated with image /u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg");
+//		String queryImage = "/u1/2015-02-18/b00001277_21i6bq_20150218_205804e.jpg";
+//		Moment aMoment = timelineDao.getMoment(queryImage);
+//		System.out.println(aMoment.toString());
+//		//timelineDao.getMomentsWithImages();
+//		timelineDao.closeTimeline();
 	}
 
 }

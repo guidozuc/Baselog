@@ -108,12 +108,12 @@ public class Run1 {
 	 * @throws ClassNotFoundException 
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
-		String filepath_concept_list = "/Users/zuccong/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
+		String filepath_concept_list = "/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
 		ConceptVocabulary cv = new ConceptVocabulary();
 		cv.readVocabulary(filepath_concept_list);
 		ImageCollection iCollection = new ImageCollection();
 		iCollection.setConceptVocabulary(cv);
-		String filepath="/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_Concepts.txt";
+		String filepath="/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_Concepts.txt";
 		iCollection.readCollection(filepath);
 
 		System.out.println("Start indexing");
@@ -121,15 +121,14 @@ public class Run1 {
 		System.out.println("... indexing finished");
 
 		System.out.println("Setting up a timelineDao");
-		TimelineDao timelineDao = new TimelineDao();
-		timelineDao.init();
-		timelineDao.loadTimeline("/Users/zuccong/data/ntcir2015_lifelogging/NTCIR_Lifelog_Dryrun_Dataset/NTCIR-Lifelog_Dryrun_dataset.xml");
+		TimelineDao timelineDao = new TimelineDao("jdbc:mysql://localhost:3306/", "NTCIRLifelogging", "root", null);
+		timelineDao.loadTimeline("/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_dataset.xml");
 		System.out.println("... timelineDao finished");
 
-		PrintWriter writer = new PrintWriter("/Users/zuccong/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
+		PrintWriter writer = new PrintWriter("/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
 		
 		QuerySetReader queryset = new QuerySetReader();
-		queryset.readQueryFile("/Users/zuccong/data/ntcir2015_lifelogging/lifeloggin_topics_dryrun.txt");
+		queryset.readQueryFile("data/lifelogging_topics_dryrun.xml");
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100);
 		writer.close();
 	}
