@@ -146,7 +146,7 @@ public class DBStorage {
 		String loaddata1 = "LOAD XML INFILE '" + XMLFilePath + "'"
 	            + "INTO TABLE minute ROWS IDENTIFIED BY '<minute>'";
 		String loaddata2 = "LOAD XML INFILE '" + XMLFilePath + "'"
-	            + "INTO TABLE image ROWS IDENTIFIED BY '<image-path>'";
+	            + "INTO TABLE image ROWS IDENTIFIED BY '<image-path>'"; 
 		
 		Statement stmt = this.connection.createStatement();
 		stmt.execute(loaddata1);
