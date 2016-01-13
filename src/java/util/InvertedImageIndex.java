@@ -25,8 +25,6 @@ public class InvertedImageIndex {
 	ListMultimap<String, Image> mainConceptIndex = ArrayListMultimap.create();
 	ListMultimap<String, Image> mainKeywordIndex = ArrayListMultimap.create();
 
-	HashMap<String, Integer> concepts = new HashMap<String, Integer>();
-	
 	public InvertedImageIndex(){}
 	
 	public InvertedImageIndex(ImageCollection iCollection){
@@ -43,13 +41,6 @@ public class InvertedImageIndex {
 
 				String conceptId = conceptEntry.getKey();
 				Concept concept = conceptEntry.getValue();
-
-				// maintain a list of TF for concepts
-				if (!concepts.containsKey(conceptId)) {
-					concepts.put(conceptId, 0);
-				} else {
-					concepts.put(conceptId, concepts.get(conceptId) + 1);
-				}
 
 				// drop concepts where the score is 0
 				if (concept.getScore() > 0.0) {
@@ -202,10 +193,9 @@ public class InvertedImageIndex {
 					}
 				});
 
-		double numConcepts = concepts.size();
 		for (String conceptId : conceptList.keySet()) {
 
-			double weight = conceptList.get(conceptId) * calculateIDF(numConcepts, concepts.get(conceptId));
+			double weight = conceptList.get(conceptId) * calculateIDF(mainConceptIndex.size(), mainConceptIndex.get(conceptId).size());
 			ranking = WeightedScorer.getInstance().combine(ranking, findImageByConcept(conceptId, imageCollection), weight);
 
 		}
@@ -213,7 +203,7 @@ public class InvertedImageIndex {
 	}
 
 	private double calculateIDF(double N, double n_t) {
-		return Math.log(N/n_t);
+		return Math.log(N/(n_t+1));
 	}
 
 	/**
