@@ -16,7 +16,8 @@ public class Concept {
 	private String description;
 	private Vector<String> keywords;
 	double score;
-	
+	double idf;
+
 	public Concept(){
 		conceptid="";
 		description="";
@@ -35,10 +36,10 @@ public class Concept {
 		this.keywords=keywords;
 		this.score=score;
 	}
-	
+
 	/*
 	 * this parses keyword phrases like "great white shark,white shark,man-eater,man-eating shark,Carcharodon carcharias"
-	 * 
+	 *
 	 * */
 	public Concept(String conceptid, String description, String keywordsPhrases){
 		this.conceptid = conceptid;
@@ -54,14 +55,14 @@ public class Concept {
 				this.keywords.add(keywordsInPhrase[j].toLowerCase());
 		}
 	}
-	
-	
+
 	/**
 	 * @return the conceptid
 	 */
 	public String getConceptid() {
 		return conceptid;
 	}
+
 
 	/**
 	 * @param conceptid the conceptid to set
@@ -111,5 +112,13 @@ public class Concept {
 	public void setScore(double score) {
 		this.score = score;
 	}
-	
+
+	public double getIdf() {
+		return idf;
+	}
+
+	public void setIdf(double idf) {
+		this.idf = idf;
+	}
+
 }

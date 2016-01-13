@@ -1,7 +1,11 @@
 import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import com.google.common.collect.Interner;
 import com.google.common.collect.ListMultimap;
 import dao.TimelineDao;
 import model.Image;
@@ -29,10 +33,10 @@ public class Run1 {
 		return imageid;
 	}
 	
-	public static List<String> runQuery(Query query, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao) throws SQLException {
+	public static List<String> runQuery(Query query, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, BiFunction<HashMap<String, Double>, ImageCollection, ListMultimap<Double, Image>> func) throws SQLException {
 		HashMap<String, Double> weightedQuery = query.getWeightedQuery();
 		System.out.println("Finding images with concepts " + weightedQuery.toString());
-		ListMultimap<Double, Image> conceptResultsArray = index.findImagebyConcept(weightedQuery, iCollection);
+		ListMultimap<Double, Image> conceptResultsArray = func.apply(weightedQuery, iCollection);
 		List<String> resultdump = new ArrayList<String>(); //this is a very dirty way of dealing with the reversion of the conceptResultsArray
 		for (Double score : conceptResultsArray.keySet()) {
 			List<Image> images = conceptResultsArray.get(score);
@@ -69,21 +73,21 @@ public class Run1 {
 		}
 	}
 	
-	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, int maxRank) throws SQLException {
+	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, int maxRank, BiFunction<HashMap<String, Double>, ImageCollection, ListMultimap<Double, Image>> func) throws SQLException {
 		for (String qid : queryset.getQuerySet().keySet()) {
 			Query query = queryset.getQuerySet().get(qid);
 			System.out.println("qid = " + qid);
-			List<String> resultdump = runQuery(query, index, iCollection, timelineDao);
+			List<String> resultdump = runQuery(query, index, iCollection, timelineDao, func);
 			printRanking(resultdump, maxRank);
 			System.out.println("-----------------------------------------------------------------------------");
 		}
 	}
 	
-	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, PrintWriter writer, int maxRank) throws SQLException {
+	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, PrintWriter writer, int maxRank, BiFunction<HashMap<String, Double>, ImageCollection, ListMultimap<Double, Image>> func) throws SQLException {
 		for (String qid : queryset.getQuerySet().keySet()) {
 			Query query = queryset.getQuerySet().get(qid);
 			System.out.println("qid = " + qid);
-			List<String> resultdump = runQuery(query, index, iCollection, timelineDao);
+			List<String> resultdump = runQuery(query, index, iCollection, timelineDao, func);
 			printRanking(resultdump, writer, maxRank);
 			System.out.println("-----------------------------------------------------------------------------");
 		}
@@ -126,11 +130,18 @@ public class Run1 {
 		timelineDao.loadTimeline(properties.getProperty("dataset"));
 		System.out.println("... timelineDao finished");
 
-		PrintWriter writer = new PrintWriter(properties.getProperty("output"), "UTF-8");
-		
+		PrintWriter writer;
 		QuerySetReader queryset = new QuerySetReader();
 		queryset.readQueryFile(properties.getProperty("topics"));
-		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100);
+
+		writer = new PrintWriter(properties.getProperty("output") + "run1.txt", "UTF-8");
+		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByConcept);
+
+		writer = new PrintWriter(properties.getProperty("output") + "run2.txt", "UTF-8");
+		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByWeightedConcept);
+
+		writer = new PrintWriter(properties.getProperty("output") + "run3.txt", "UTF-8");
+		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByIDFConcept);
 		writer.close();
 	}
 

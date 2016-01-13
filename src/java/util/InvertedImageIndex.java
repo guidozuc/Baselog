@@ -1,13 +1,8 @@
 package util;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.util.*;
 
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -15,6 +10,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimaps;
 import model.Concept;
 import model.Image;
+import score.AdditiveScorer;
+import score.WeightedScorer;
 
 /**
  * 
@@ -27,6 +24,8 @@ import model.Image;
 public class InvertedImageIndex {
 	ListMultimap<String, Image> mainConceptIndex = ArrayListMultimap.create();
 	ListMultimap<String, Image> mainKeywordIndex = ArrayListMultimap.create();
+
+	HashMap<String, Integer> concepts = new HashMap<String, Integer>();
 	
 	public InvertedImageIndex(){}
 	
@@ -44,6 +43,13 @@ public class InvertedImageIndex {
 
 				String conceptId = conceptEntry.getKey();
 				Concept concept = conceptEntry.getValue();
+
+				// maintain a list of TF for concepts
+				if (!concepts.containsKey(conceptId)) {
+					concepts.put(conceptId, 0);
+				} else {
+					concepts.put(conceptId, concepts.get(conceptId) + 1);
+				}
 
 				// drop concepts where the score is 0
 				if (concept.getScore() > 0.0) {
@@ -80,7 +86,7 @@ public class InvertedImageIndex {
 	 * @param iCollection the collection of images used for retrieval (the same collection that has been indexed). Note that here the collection is used only for metadat information
 	 * @return the ranking
 	 */
-	public  ListMultimap<Double, Image> findImagebyConcept(String aConcept, ImageCollection iCollection) {
+	public ListMultimap<Double, Image> findImageByConcept(String aConcept, ImageCollection iCollection) {
 		HashMap<String, Double> accumulator = new HashMap<String, Double>();
 		List<Image> results = new Vector<Image>();
 		results = mainConceptIndex.get(aConcept);
@@ -118,7 +124,7 @@ public class InvertedImageIndex {
 	 * @param iCollection the collection of images used for retrieval (the same collection that has been indexed). Note that here the collection is used only for metadat information
 	 * @return the ranking
 	 */
-	public  ListMultimap<Double, Image> findImagebyConcept(Vector<String> conceptList, ImageCollection iCollection) {
+	public ListMultimap<Double, Image> findImageByConcept(Vector<String> conceptList, ImageCollection iCollection) {
 		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(
 				  new TreeMap<Double, Collection<Image>>(),
 				  new Supplier<List<Image>>() {
@@ -126,23 +132,44 @@ public class InvertedImageIndex {
 				      return Lists.newArrayList();
 				    }
 				  });
-		Iterator<String> iterator = conceptList.iterator();
-		while (iterator.hasNext()) {
-			String aConcept = iterator.next();
-			ranking = combine(ranking, findImagebyConcept(aConcept, iCollection));
+		for (String aConcept : conceptList) {
+			ranking = AdditiveScorer.getInstance().combine(ranking, findImageByConcept(aConcept, iCollection));
 		}
 		return ranking;
 	}
-	
+
+	/**
+	 *
+	 * This method allows to search the image collection by querying with a concept
+	 *
+	 * @param conceptList a hashmap containing the list of concepts for which we want to find relevant images with associated weights. The higher the weight, the more important a concept is in the context of this query and thus the more it will influence retrieval
+	 * @param iCollection the collection of images used for retrieval (the same collection that has been indexed). Note that here the collection is used only for metadata information
+	 * @return the ranking
+	 */
+	public ListMultimap<Double, Image> findImageByConcept(HashMap<String, Double> conceptList, ImageCollection iCollection) {
+		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(
+				new TreeMap<Double, Collection<Image>>(),
+				new Supplier<List<Image>>() {
+					public List<Image> get() {
+						return Lists.newArrayList();
+					}
+				});
+
+		for (String aConcept : conceptList.keySet()) {
+			ranking = WeightedScorer.getInstance().combine(ranking, findImageByConcept(aConcept, iCollection), 1.0);
+		}
+		return ranking;
+	}
+
 	/**
 	 * 
 	 * This method allows to search the image collection by querying with a concept
 	 * 
-	 * @param conceptList an hashmap containing the list of concepts for which we want to find relevant images with associated weights. The higher the weight, the more important a concept is in the context of this query and thus the more it will influence retrieval 
+	 * @param conceptList a hashmap containing the list of concepts for which we want to find relevant images with associated weights. The higher the weight, the more important a concept is in the context of this query and thus the more it will influence retrieval
 	 * @param iCollection the collection of images used for retrieval (the same collection that has been indexed). Note that here the collection is used only for metadata information
 	 * @return the ranking
 	 */
-	public  ListMultimap<Double, Image> findImagebyConcept(HashMap<String, Double> conceptList, ImageCollection iCollection) {
+	public ListMultimap<Double, Image> findImageByWeightedConcept(HashMap<String, Double> conceptList, ImageCollection iCollection) {
 		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(
 				  new TreeMap<Double, Collection<Image>>(),
 				  new Supplier<List<Image>>() {
@@ -153,42 +180,20 @@ public class InvertedImageIndex {
 		
 		for (String aConcept : conceptList.keySet()) {
 			double weight = conceptList.get(aConcept);
-			ranking = combine(ranking, findImagebyConcept(aConcept, iCollection), weight);
+			ranking = WeightedScorer.getInstance().combine(ranking, findImageByConcept(aConcept, iCollection), weight);
 		}
 		return ranking;
 	}
-	
+
+
 	/**
-	 * 
-	 * This ancillary method is used to combine two rankings of images
-	 * 
-	 * @param a a ranking of images (with associated scores)
-	 * @param b another ranking of images (with associated scores)
-	 * @return the merged ranking
-	 */
-	public ListMultimap<Double, Image> combine (ListMultimap<Double, Image> a, ListMultimap<Double, Image> b){
-		HashMap<Image, Double> merged = new HashMap<Image, Double>();
-		for (Double score : a.keySet()) {
-			List<Image> images = a.get(score);
-			Iterator<Image> iterator = images.iterator();
-			while(iterator.hasNext()){
-				Image anImage = iterator.next();
-				merged.put(anImage, score);	
-			}		
-		}
-		for (Double score : b.keySet()) {
-			List<Image> images = b.get(score);
-			Iterator<Image> iterator = images.iterator();
-			while(iterator.hasNext()){
-				Image anImage = iterator.next();
-				double oldscore=0.0;
-				if(merged.containsKey(anImage)) {
-					oldscore = merged.get(anImage);
-				}
-				oldscore = score+oldscore;
-				merged.put(anImage, oldscore);	
-			}		
-		}
+	 * Use IDF in the weighting process for finding images by concept
+	 * @param conceptList a hashmap containing the list of concepts for which we want to find relevant images with associated weights. The higher the weight, the more important a concept is in the context of this query and thus the more it will influence retrieval
+	 * @param imageCollection the collection of images used for retrieval (the same collection that has been indexed). Note that here the collection is used only for metadata information
+     * @return the ranking
+     */
+	public ListMultimap<Double, Image> findImageByIDFConcept(HashMap<String, Double> conceptList, ImageCollection imageCollection) {
+
 		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(
 				new TreeMap<Double, Collection<Image>>(),
 				new Supplier<List<Image>>() {
@@ -196,57 +201,19 @@ public class InvertedImageIndex {
 						return Lists.newArrayList();
 					}
 				});
-		for(Image anImage: merged.keySet()) {
-			double aScore = merged.get(anImage);
-			ranking.put(aScore, anImage);
+
+		double numConcepts = concepts.size();
+		for (String conceptId : conceptList.keySet()) {
+
+			double weight = conceptList.get(conceptId) * calculateIDF(numConcepts, concepts.get(conceptId));
+			ranking = WeightedScorer.getInstance().combine(ranking, findImageByConcept(conceptId, imageCollection), weight);
+
 		}
 		return ranking;
 	}
-	
-	/**
-	 * 
-	 * This ancillary method is used to combine two rankings of images
-	 * 
-	 * @param a a ranking of images (with associated scores)
-	 * @param b another ranking of images (with associated scores). This is the ranking that needs to be weighted by the weight
-	 * @param weight the weight of this concept. Weights multiply the score of a concept for a query
-	 * @return the merged ranking
-	 */
-	public ListMultimap<Double, Image> combine (ListMultimap<Double, Image> a, ListMultimap<Double, Image> b, Double weight){
-		HashMap<Image, Double> merged = new HashMap<Image, Double>();
-		for (Double score : a.keySet()) {
-			List<Image> images = a.get(score);
-			Iterator<Image> iterator = images.iterator();
-			while(iterator.hasNext()){
-				Image anImage = iterator.next();
-				merged.put(anImage, score);	
-			}		
-		}
-		for (Double score : b.keySet()) {
-			List<Image> images = b.get(score);
-			Iterator<Image> iterator = images.iterator();
-			while(iterator.hasNext()){
-				Image anImage = iterator.next();
-				double oldscore=0.0;
-				if(merged.containsKey(anImage)) {
-					oldscore = weight * merged.get(anImage);
-				}
-				oldscore = score+oldscore;
-				merged.put(anImage, oldscore);	
-			}		
-		}
-		ListMultimap<Double, Image> ranking = Multimaps.newListMultimap(
-				new TreeMap<Double, Collection<Image>>(),
-				new Supplier<List<Image>>() {
-					public List<Image> get() {
-						return Lists.newArrayList();
-					}
-				});
-		for(Image anImage: merged.keySet()) {
-			double aScore = merged.get(anImage);
-			ranking.put(aScore, anImage);
-		}
-		return ranking;
+
+	private double calculateIDF(double N, double n_t) {
+		return Math.log(N/n_t);
 	}
 
 	/**
