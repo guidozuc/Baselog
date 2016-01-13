@@ -106,7 +106,7 @@ public class InvertedImageIndex {
 	    }
 		return ranking;
 	}
-	
+
 	/**
 	 * 
 	 * This method allows to search the image collection by querying with a concept

@@ -210,7 +210,7 @@
 		<keywords>rugby football television</keywords>
 		<constraints>at home</constraints>
 		<mapping>
-			<concept id="c_852" weight="1" />
+			<concept id="c_852" weight="1.0" />
 		</mapping>
 	</topic>
 	<topic>

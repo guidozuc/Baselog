@@ -1,11 +1,6 @@
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.google.common.collect.ListMultimap;
 import dao.TimelineDao;
@@ -101,20 +96,19 @@ public class Run1 {
 			System.out.println("-----------------------------------------------------------------------------");
 		}
 	}
-	/**
-	 * @param args
-	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
-	 */
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
-		//TODO: read paths from a configuration file; need to set gradlew to accept and parse inputs
-		String filepath_concept_list = "/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";//"/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt";
+
+		String propertiesFileName = "config.properties";
+		Properties properties = new Properties();
+		properties.load(new FileInputStream(propertiesFileName));
+
+		String filepath_concept_list = properties.getProperty("concepts");
 		ConceptVocabulary cv = new ConceptVocabulary();
 		cv.readVocabulary(filepath_concept_list);
 		ImageCollection iCollection = new ImageCollection();
 		iCollection.setConceptVocabulary(cv);
-		String filepath="/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_Concepts.txt";
+		String filepath = properties.getProperty("collection");
 		iCollection.readCollection(filepath);
 
 		System.out.println("Start indexing");
@@ -123,13 +117,13 @@ public class Run1 {
 
 		System.out.println("Setting up a timelineDao");
 		TimelineDao timelineDao = new TimelineDao("jdbc:mysql://localhost:3306/", "NTCIRLifelogging", "root", null);
-		timelineDao.loadTimeline("/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_dataset.xml");
+		timelineDao.loadTimeline(properties.getProperty("dataset"));
 		System.out.println("... timelineDao finished");
 
-		PrintWriter writer = new PrintWriter("/data/ntcir2015_lifelogging/runs/run1.txt", "UTF-8");//"/Users/harryscells/data/ntcir2015_lifelogging/run1.txt", "UTF-8");
+		PrintWriter writer = new PrintWriter(properties.getProperty("output"), "UTF-8");
 		
 		QuerySetReader queryset = new QuerySetReader();
-		queryset.readQueryFile("data/lifelogging_topics_formal.xml");//("data/lifelogging_topics_dryrun.xml");
+		queryset.readQueryFile(properties.getProperty("topics"));
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100);
 		writer.close();
 	}
