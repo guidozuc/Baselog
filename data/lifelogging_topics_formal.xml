@@ -406,7 +406,11 @@
 		<narrative>To be considered relevant, the moment must take place in a restaurant at a place of work. The meal must be a visibly being consumed and there must be one other individual with whom I am interacting. Any moments not containing all of these elements are not considered to be relevant.</narrative>
 		<keywords>eating lunch with someone</keywords>
 		<constraints>only one person visible directly in front and meal is visible</constraints>
-		<mapping></mapping>
+		<mapping>
+			<concept id="c_924" weight="0.9" />
+			<concept id="c_923" weight="0.9" />
+			<concept id="c_763" weight="1" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>030</id>
@@ -415,9 +419,11 @@
 		<title>In a Meeting</title>
 		<description>Find the moment(s) in which I was in a meeting at work with 2 or more people.</description>
 		<narrative>To be considered relevant, the moment must occur at meeting room and must contain at least two colleagues sitting around a table at the meeting. Metings that occur outside of my place of work are not relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>meeting with two or more people</keywords>
+		<constraints>inside a meeting room where two or more people are visisble</constraints>
+		<mapping>
+			<concept id="c_527" weight="0.2" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>031</id>
@@ -426,9 +432,13 @@
 		<title>Bus to the Airport</title>
 		<description>Find the moment(s) in which I was taking a bus to an airport.</description>
 		<narrative>To be considered relevant, the user must be riding a bus, the final destination of which is an airport. The user must be going to the airport and not coming from the airport. It does not matter in which country the moment takes place.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>on a bus to airport</keywords>
+		<constraints>bus must be travelling to airport</constraints>
+		<mapping>
+			<concept id="c_655" weight="0.5" />
+			<concept id="c_780" weight="0.1" />
+			<concept id="c_896" weight="0.1" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>032</id>
@@ -437,9 +447,11 @@
 		<title>A Movie on the Flight</title>
 		<description>Find the moment(s) when I was watching a movie on a flight.</description>
 		<narrative>To be considered relevant the user must be on a plane/flight and must be watching a movie on a headrest mounted screen in front of him/her. Movies in any other setting, or other activities instead of watching  a movie are not considered relevant. Moments which show the user watching a movie, as well as engaged in another activity (e.g. eating) are considered relevant, once the event occurs on a flight.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>watching a movie on an airplane</keywords>
+		<constraints>movie must be visible and location must be an airplane</constraints>
+		<mapping>
+			<concept id="c_852" weight="0.1" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>033</id>
@@ -448,9 +460,11 @@
 		<title>The Metro</title>
 		<description>Find the moment(s) when I was riding a metro.</description>
 		<narrative>To be considered relevant, the user must be riding the metro. Moments outside the metro, or passing by metro stations are not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>on the metro</keywords>
+		<constraints>inside the train not on a platform and not looking at train</constraints>
+		<mapping>
+			<concept id="c_467" weight="0.2" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>034</id>
@@ -459,9 +473,13 @@
 		<title>A Garden Chat with Dog</title>
 		<description>Find the moment(s) in which I was sitting in a garden and talking to someone.</description>
 		<narrative>To be considered relevant the moment(s) must take place in a garden setting and there must be visible interaction with another person. The relevant moment must also contain a dog who becomes visible from time to time. Moments of garden chats that do not include a dog are not considered relevant. Other moments with dogs and people not in a garden setting are not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>talking to someone in a garden with dog</keywords>
+		<constraints>in a garden with person and dog visible</constraints>
+		<mapping>
+			<concept id="c_429" weight="0.1" />
+			<concept id="c_622" weight="0.1" />
+			<concept id="c_236" weight="0.5" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>035</id>
@@ -470,9 +488,12 @@
 		<title>Lion at the Gate</title>
 		<description>Find the moment(s) when I was looking at a statue of a Chinese mythical lion at the gate of a temple.</description>
 		<narrative>To be considered relevant, the lion must be visible and the gate must be visible. The user must stand in front of the lion.  It must also be clear that the user is attending a temple to be considered relevant. Other occurrences of gates or lions are not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>temple gate lion statue</keywords>
+		<constraints>statue of a lion visible next to the gate of a temple</constraints>
+		<mapping>
+			<concept id="c_292" weight="0.8" />
+			<concept id="c_498" weight="0.8" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>036</id>
@@ -481,9 +502,13 @@
 		<title>Checking the Menu</title>
 		<description>Find the moment(s) when I was standing outside a restaurant checking the menu. </description>
 		<narrative>To be considered relevant, the user must be checking the menu of a restaurant while outside the restaurant. Reading the menu inside the restaurant is not considered relevant. Other views of restaurants are not considered relevant if the user is not reading the menu outside.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>menu outside a restaurant</keywords>
+		<constraints>menu visible on a stand outside the restaurant</constraints>
+		<mapping>
+			<concept id="c_763" weight="1.0" />
+			<concept id="c_923" weight="1.0" />
+			<concept id="c_920" weight="0.7" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>037</id>
@@ -492,8 +517,8 @@
 		<title>The Bird's Nest Stadium</title>
 		<description>Find the moment(s) in which the Bird's Nest Stadium (in Beijing) is visible.</description>
 		<narrative>The Bird's Nest Stadium in Beijing is a well known structure. Moments in which the Bird's Nest Stadium are visible are considered relevant. The user may be outside or inside the stadium. Moments in other stadiums, or looking at photos of the Bird's Nest stadium are not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>bird's nest staduim</keywords>
+		<constraints>outside or inside the stadium but not images of it</constraints>
 		<mapping></mapping>
 	</topic>
 	<topic>
@@ -503,9 +528,12 @@
 		<title>Watching TV</title>
 		<description>Find the moment(s) when I was watching TV.</description>
 		<narrative>To be relevant, TV set must be on and entirely or partially visible during the moments. The user must be watching TV for a period of time not less than 5 minutes. Moments which show the user was watching TV while having meals are considered relevant. Moments in which the  user is using desktop computer or laptop to watch TV shows are not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>watching tv</keywords>
+		<constraints>television prominent in vision, cannot be computer or phone screen</constraints>
+		<mapping>
+			<concept id="c_852" weight="1.0" />
+			<concept id="c_832" weight="0.2" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>039</id>
@@ -514,9 +542,11 @@
 		<title>Grocery Store</title>
 		<description>Find the moments when I was in a grocery store.</description>
 		<narrative>Grocery store moments include any time that the user was in a grocery store, large or small.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>grocery story</keywords>
+		<constraints>inside or outside grocery store</constraints>
+		<mapping>
+			<concept id="c_583" weight="1.0" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>040</id>
@@ -525,9 +555,12 @@
 		<title>Strolling on the Deck</title>
 		<description>Find the moment(s) when I was walking on the deck of a ship.</description>
 		<narrative>Relevant moments are those that show the user walking on the deck of a ship. The sea must be visible in the event.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>walking on deck of a boat</keywords>
+		<constraints>sea is visible</constraints>
+		<mapping>
+			<concept id="c_979" weight="0.2" />
+			<concept id="c_629" weight="1.0" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>041</id>
@@ -536,8 +569,8 @@
 		<title>Eating on the Roadside</title>
 		<description>Find the moment(s) when I was eating at the side of road</description>
 		<narrative>Find the moment(s) when user is eating food at the side of road and facing a big tree. The lunch box  and the tree must be visible for the moment to be considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>eating roadside</keywords>
+		<constraints>lunchbox and tree is visible</constraints>
 		<mapping></mapping>
 	</topic>
 	<topic>
@@ -547,9 +580,13 @@
 		<title>Writing</title>
 		<description>Find the moment(s) when I was writing on a paper using a pen or pencil.</description>
 		<narrative>To be considered relevant the user must be writing some information on a paper using a pen or a pencil. The writing behaviour must be visible. It does not matter what type of pen is being used or the type of paper. It does not matter what the user is writing.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>writing with pen or pencil</keywords>
+		<constraints>either a pen or pencil must be visibly writing on paper</constraints>
+		<mapping>
+			<concept id="c_710" weight="0.4" />
+			<concept id="c_419" weight="0.9" />
+			<concept id="c_564" weight="0.9" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>043</id>
@@ -558,8 +595,8 @@
 		<title>The Elevator</title>
 		<description>Find the moment(s) when I was either waiting for, or taking the elevator.</description>
 		<narrative>The moments which show the user is waiting for the elevator or taking the elevator are relevant. The elevator must be visible to be considered relevant, though the user must also be seen to subsequently ride the elevator.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>waiting for or taking the elevator</keywords>
+		<constraints>elevator must be visible</constraints>
 		<mapping></mapping>
 	</topic>
 	<topic>
@@ -569,9 +606,12 @@
 		<title>Car Repair</title>
 		<description>Find the moment(s) when I was repairing a car.</description>
 		<narrative>The moments which show the user is repairing a car are relevant. Any other moments that show the user's car or another person's car that is not under repair are not relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>repairing a car</keywords>
+		<constraints>visibly repairing car</constraints>
+		<mapping>
+			<concept id="c_480" weight="0.3" />
+			<concept id="c_818" weight="0.2" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>045</id>
@@ -580,9 +620,12 @@
 		<title>Drinking in a Pub</title>
 		<description>Find the moment(s) when I was drinking in a pub with friends or alone.</description>
 		<narrative>Relevant moments show the user drinking in a pub. Drinking at home or in any place other than a pub are not considered to be relevant. The user may be with a friend, or alone.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>drinking in a pub</keywords>
+		<constraints>either with people or without</constraints>
+		<mapping>
+			<concept id="c_441" weight="0.8" />
+			<concept id="c_442" weight="0.8" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>046</id>
@@ -591,9 +634,12 @@
 		<title>Barbershop</title>
 		<description>Find the moment(s) when I was in a barbershop.</description>
 		<narrative>Moments which show the user in a barbershop are considered relevant. It does not matter whether the user takes a haircut or not.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
-		<mapping></mapping>
+		<keywords>barbershop</keywords>
+		<constraints>not haircut necessary</constraints>
+		<mapping>
+			<concept id="c_425" weight="1.0" />
+			<concept id="c_424" weight="0.6" />
+		</mapping>
 	</topic>
 	<topic>
 		<id>047</id>
@@ -602,8 +648,8 @@
 		<title>Lottery</title>
 		<description>Find the moment(s) when I was buying a lottery ticket.</description>
 		<narrative>The moments which show the user buying lottery ticket in a lottery store is considered relevant. The user may be interacting with a machine or a shop assistant. Looking at lottery advertisements in any location is not considered relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>buying lottery ticket</keywords>
+		<constraints>exchange of money must be visible</constraints>
 		<mapping></mapping>
 	</topic>
 	<topic>
@@ -613,8 +659,8 @@
 		<title>Checkout</title>
 		<description>Find the moment(s) when I was paying at the checkout counter.</description>
 		<narrative>The moments which show the user waiting to pay and paying at the checkout counter are considered relevant, once the checkout staff are visible. Moments of shopping leading up until checkout are not considered to be relevant.</narrative>
-		<keywords></keywords>
-		<constraints></constraints>
+		<keywords>paying at checkout counter</keywords>
+		<constraints>staff member and money exchange visible</constraints>
 		<mapping></mapping>
 	</topic>
 </topics>
