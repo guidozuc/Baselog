@@ -99,9 +99,23 @@ public class Run1 {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
 
+		/**
+		 * # Example config.properties:
+		 * concepts=/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt
+		 * collection=/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_Concepts.txt
+		 * dataset=/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_dataset.xml
+		 * queryfile=data/lifelogging_topics_formal.xml
+		 * output=/Users/harryscells/data/ntcir2015_lifelogging/run1.txt
+		 */
+
 		String propertiesFileName = "config.properties";
 		Properties properties = new Properties();
-		properties.load(new FileInputStream(propertiesFileName));
+		try {
+			properties.load(new FileInputStream(propertiesFileName));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Need a config.properties to perform a run.");
+		}
 
 		String filepath_concept_list = properties.getProperty("concepts");
 		ConceptVocabulary cv = new ConceptVocabulary();
