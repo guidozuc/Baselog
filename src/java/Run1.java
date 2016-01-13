@@ -104,7 +104,7 @@ public class Run1 {
 		 * concepts=/Users/harryscells/data/ntcir2015_lifelogging/Caffe_concepts_list.txt
 		 * collection=/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_Concepts.txt
 		 * dataset=/Users/harryscells/data/ntcir2015_lifelogging/NTCIR_Lifelog_Formal_Dataset/NTCIR-Lifelog_Formal_dataset.xml
-		 * queryfile=data/lifelogging_topics_formal.xml
+		 * topics=data/lifelogging_topics_formal.xml
 		 * output=/Users/harryscells/data/ntcir2015_lifelogging/run1.txt
 		 */
 
