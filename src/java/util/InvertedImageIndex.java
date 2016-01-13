@@ -31,30 +31,33 @@ public class InvertedImageIndex {
 	public InvertedImageIndex(){}
 	
 	public InvertedImageIndex(ImageCollection iCollection){
-		Iterator it = iCollection.collection.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry pair = (Map.Entry)it.next();
-	        String imageURL = (String) pair.getKey();
-	        Image im =  (Image) pair.getValue();
-	        HashMap<String, Concept> cv = im.getConceptVector();
-	        //now, iterate through the concept vector to index each keyword.
-	        Iterator itCv = cv.entrySet().iterator();
-	        while (itCv.hasNext()) {
-	        	Map.Entry pairCv = (Map.Entry)itCv.next();
-	        	String conceptid = (String) pairCv.getKey();
-	        	Concept thisConcept = (Concept) pairCv.getValue();
-	        	if(thisConcept.getScore()>0.0)
-	        		this.putConceptImage(conceptid, im); // adds an image to the mainConceptIndex
-	        	//now need to iterate through the thisConcept.keywords to be able to index the keywords
-	        	Vector<String> someKeywords = thisConcept.getKeywords();
-	        	Iterator itK = someKeywords.iterator();
-	            while (itK.hasNext()){
-	            	String akeyword = (String) itK.next();
-	            	if(thisConcept.getScore()>0.0)
-	            		this.putKeywordImage(akeyword, im);
-	            }
-	        }
-	    }
+
+		// loop over the entire collection of images
+		for (Map.Entry<String, Image> imageCollection : iCollection.collection.entrySet()) {
+
+			// get the image and concept vector for each item in the collection
+			Image image = imageCollection.getValue();
+			HashMap<String, Concept> conceptVector = image.getConceptVector();
+
+			// loop over the concepts in the image
+			for (Map.Entry<String, Concept> conceptEntry : conceptVector.entrySet()) {
+
+				String conceptId = conceptEntry.getKey();
+				Concept concept = conceptEntry.getValue();
+
+				// drop concepts where the score is 0
+				if (concept.getScore() > 0.0) {
+					this.putConceptImage(conceptId, image);
+
+					// add all the keywords in the concepts to the image
+					for (String keyword : concept.getKeywords()) {
+						this.putKeywordImage(keyword, image);
+					}
+
+				}
+
+			}
+		}
 	}
 	
 	public void putConceptImage(String aConceptid, Image anImage) {

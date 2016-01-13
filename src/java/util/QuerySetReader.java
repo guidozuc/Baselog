@@ -47,21 +47,16 @@ public class QuerySetReader {
 
 					Element eElement = (Element) nNode;
 					Query query = new Query();
-					//System.out.println("id : " + eElement.getElementsByTagName("id").item(0).getTextContent());
-					query.setQid(eElement.getElementsByTagName("id").item(0).getTextContent());
-					//System.out.println("uid : " + eElement.getElementsByTagName("uid").item(0).getTextContent());
-					query.setUid(eElement.getElementsByTagName("uid").item(0).getTextContent());
-					//System.out.println("type : " + eElement.getElementsByTagName("type").item(0).getTextContent());
-					query.setType(eElement.getElementsByTagName("type").item(0).getTextContent());
-					//System.out.println("title : " + eElement.getElementsByTagName("title").item(0).getTextContent());
-					query.setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
-					//System.out.println("description : " + eElement.getElementsByTagName("description").item(0).getTextContent());
-					query.setDescription(eElement.getElementsByTagName("description").item(0).getTextContent());
-					//System.out.println("narrative : " + eElement.getElementsByTagName("narrative").item(0).getTextContent());
-					query.setNarrative(eElement.getElementsByTagName("narrative").item(0).getTextContent());
-					//System.out.println("mapping : " + eElement.getElementsByTagName("mapping").item(0).getTextContent());
-//					query.setConcept_maping(eElement.getElementsByTagName("mapping").item(0).getTextContent());
 
+					// top-level node elements
+					query.setQid(eElement.getElementsByTagName("id").item(0).getTextContent());
+					query.setUid(eElement.getElementsByTagName("uid").item(0).getTextContent());
+					query.setType(eElement.getElementsByTagName("type").item(0).getTextContent());
+					query.setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
+					query.setDescription(eElement.getElementsByTagName("description").item(0).getTextContent());
+					query.setNarrative(eElement.getElementsByTagName("narrative").item(0).getTextContent());
+
+					// concept nodes
 					NodeList mapping = eElement.getElementsByTagName("mapping").item(0).getChildNodes();
 					for (int i = 0; i < mapping.getLength(); i++) {
 						Node map = mapping.item(i);

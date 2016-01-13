@@ -37,44 +37,36 @@ public class Run1 {
 		for (Double score : conceptResultsArray.keySet()) {
 			List<Image> images = conceptResultsArray.get(score);
 			//Iterator<model.Image> iterator = images.iterator();
-			ReverseIterator<Image> riterator = new ReverseIterator<Image>(images);
-			while(riterator.hasNext()) {
-				Image theNextImage = riterator.next();
-				//String line = timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score;
-				String line = query.getQid() + ", " + formatImageID(theNextImage.getImageURL() + ", 1, " + score);
-				
-				//System.out.println(timelineDao.getDate(theNextImage) + " " + timelineDao.getMinute(theNextImage) + " " +  theNextImage.getImageURL() + " " + score);
+
+			for (int i = images.size() - 1; i >= 0; i--) {
+
+				Image image = images.get(i);
+				String line = query.getQid() + ", " + formatImageID(image.getImageURL() + ", 1, " + score);
 				resultdump.add(line);
-			}	
+
+			}
 		}
 		return resultdump;
 	}
 	
 	public static void printRanking(List<String> resultdump,  int maxRank) {
 		/*The following reverses the list of results to iterate from the one with highest score to that with the lowest*/
-		//TODO: this could be removed if scores were recorded as negative scores.
-		ReverseIterator<String> reversedList = new ReverseIterator<String>(resultdump);
-		Iterator<String> rit = reversedList.iterator();
-		int count=0;
-		while(rit.hasNext() && count<maxRank){
-			System.out.println(rit.next());
+		int count = 0;
+		for (int i = resultdump.size() - 1; i >= 0 && count < maxRank; i--) {
+			System.out.println(resultdump.get(i));
 			count++;
 		}
 	}
 	
 	public static void printRanking(List<String> resultdump, PrintWriter writer, int maxRank) {
 		/*The following reverses the list of results to iterate from the one with highest score to that with the lowest*/
-		//TODO: this could be removed if scores were recorded as negative scores.
-		ReverseIterator<String> reversedList = new ReverseIterator<String>(resultdump);
-		Iterator<String> rit = reversedList.iterator();
-		int count=0;
-		while(rit.hasNext() && count<maxRank){
-			String nextResultLine = rit.next();
-			System.out.println(nextResultLine);
-			writer.println(nextResultLine);
+		int count = 0;
+		for (int i = resultdump.size() - 1; i >= 0 && count < maxRank; i--) {
+			String result = resultdump.get(i);
+			System.out.println(result);
+			writer.println(result);
 			count++;
 		}
-		
 	}
 	
 	public static void scoreQueryset(QuerySetReader queryset, InvertedImageIndex index, ImageCollection iCollection, TimelineDao timelineDao, int maxRank) throws SQLException {
