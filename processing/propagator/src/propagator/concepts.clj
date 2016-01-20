@@ -5,11 +5,11 @@
 
 (def stopwords (set (read-string (slurp "resources/stopwords.edn"))))
 
-(defn tokenise
+(defn- tokenise
   [string]
   (set/difference (set(str/split (str/lower-case (str/replace string #"(?i)[^\w']+" " ")) #" ")) stopwords))
 
-(defn print-concepts
+(defn- print-concepts
   ([concepts output-file]
     (spit output-file "")
     (print-concepts concepts output-file 1))
@@ -28,4 +28,3 @@
   [input-file output-file]
   (let [annotations (json/read-str (slurp input-file) :key-fn keyword)]
     (print-concepts (reduce into (map tokenise (map second (map vals annotations)))) output-file)))
-    ; (hash-set (mapcat tokenise ))))
