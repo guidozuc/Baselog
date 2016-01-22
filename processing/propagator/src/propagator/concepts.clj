@@ -5,9 +5,9 @@
 
 (def stopwords (set (read-string (slurp "resources/stopwords.edn"))))
 
-(defn- tokenise
+(defn tokenise
   [string]
-  (set/difference (set(str/split (str/lower-case (str/replace string #"(?i)[^\w']+" " ")) #" ")) stopwords))
+  (filter #(not (contains? stopwords %)) (str/split (str/lower-case (str/replace string #"(?i)[^\w']+" " ")) #" ")))
 
 (defn- print-concepts
   ([concepts output-file]

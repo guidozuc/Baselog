@@ -60,9 +60,9 @@
   (let [similar-clusters (keys (get cluster-similarity cluster))
         clusters (set/intersection (set annotated-clusters) (set similar-clusters))
         images (get mapping cluster)
-        annotating-images (mapcat #(get mapping %) clusters)
+        annotating-images (mapcat #(vector (first (get mapping %))) clusters)
         propagated-annotations (mapcat #(vector (get annotated-images %)) annotating-images)]
-      (apply hash-map (reduce into (util/pmapcat #(apply hash-map (vector % (str/join #" " propagated-annotations))) images)))))
+      (apply hash-map (reduce into (mapcat #(apply hash-map (vector % (str/join #" " propagated-annotations))) images)))))
 
 (defn- intercluster
   "propagate annotations to images which have not yet been annotated inside clusters which have not yet recieved an annotated image

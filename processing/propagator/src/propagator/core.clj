@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [propagator.propagate :as propagate]
             [propagator.concepts  :as concepts]
+            [propagator.topics    :as topics]
             [clojure.data.json    :as json]))
 
 (defn help []
@@ -36,6 +37,7 @@
           (= action "help") (help)
           (= action "propagate") (propagate/distance (nth args 1) (nth args 2) (nth args 3) (nth args 4) (nth args 5))
           (= action "concepts") (concepts/create (nth args 1) (nth args 2))
+          (= action "topics") (topics/create (nth args 1) (nth args 2) (nth args 3))
           (= action "invert-mapping") (spit (nth args 2) (pr-str (reduce conj (propagate/invert-mapping (json/read-str (slurp (nth args 1)) :key-fn keyword)))))
           :else
             (display-error "Could not parse command" "propagator [action] [option]")))))
