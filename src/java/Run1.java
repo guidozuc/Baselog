@@ -134,13 +134,13 @@ public class Run1 {
 		QuerySetReader queryset = new QuerySetReader();
 		queryset.readQueryFile(properties.getProperty("topics"));
 
-		writer = new PrintWriter(properties.getProperty("output") + "run1.txt", "UTF-8");
+		writer = new PrintWriter(properties.getProperty("output") + "cluster-run1.txt", "UTF-8");
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByConcept);
 
-		writer = new PrintWriter(properties.getProperty("output") + "run2.txt", "UTF-8");
+		writer = new PrintWriter(properties.getProperty("output") + "cluster-run2.txt", "UTF-8");
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByWeightedConcept);
 
-		writer = new PrintWriter(properties.getProperty("output") + "run3.txt", "UTF-8");
+		writer = new PrintWriter(properties.getProperty("output") + "cluster-run3.txt", "UTF-8");
 		scoreQueryset(queryset, index, iCollection, timelineDao, writer, 100, index::findImageByIDFConcept);
 		writer.close();
 	}

@@ -69,8 +69,8 @@ public class ImageCollection {
 				for(int i=1; i<fields.length;i++) {
 					String conceptid = conceptIds.get(i);
 					//if(Double.parseDouble(fields[i])>0.0) {
-						Concept thisConcept = new Concept(conceptid, this.conceptVocabulary.getConceptDescription(conceptid),
-							this.conceptVocabulary.getConceptkeywords(conceptid), Double.parseDouble(fields[i]));
+					Concept thisConcept = new Concept(conceptid, this.conceptVocabulary.getConceptDescription(conceptid),
+						this.conceptVocabulary.getConceptkeywords(conceptid), Double.parseDouble(fields[i]));
 						image.addConcept(thisConcept);
 					//}
 					

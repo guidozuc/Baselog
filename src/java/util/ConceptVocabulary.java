@@ -79,7 +79,7 @@ public class ConceptVocabulary {
 	 */
 	public String getConceptDescription(String conceptid, boolean print) {
 		if(!this.vocabulary.containsKey(conceptid)) 
-			throw new IllegalArgumentException("model.Concept id not found in the vocabulary for id " + conceptid);
+			throw new IllegalArgumentException("Concept id not found in the vocabulary for id " + conceptid);
 		else {
 			Concept aConcept = this.vocabulary.get(conceptid);
 			String description = aConcept.getDescription();
